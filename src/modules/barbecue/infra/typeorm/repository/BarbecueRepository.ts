@@ -1,4 +1,3 @@
-// import { isSameDay } from 'date-fns';
 import { getRepository, Repository } from 'typeorm';
 import IBarbecueRepository from '@modules/barbecue/repository/IBarbecueRepository';
 import ICreateBarbecueDTO from '@modules/barbecue/dto/ICreateBarbecueDTO';

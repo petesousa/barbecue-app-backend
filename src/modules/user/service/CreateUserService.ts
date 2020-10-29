@@ -1,7 +1,7 @@
-import { hash } from 'bcryptjs';
 import { injectable, inject } from 'tsyringe';
 
 import GenericError from '@shared/errors/GenericError';
+import IHashProvider from '@modules/user/providers/HashProvider/model/IHashProvider';
 import IUserRepository from '../repository/IUserRepository';
 
 interface ICreateUserRequestDTO {
@@ -21,6 +21,8 @@ class CreateUserService {
   constructor(
     @inject('UserRepository')
     private userRepository: IUserRepository,
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async run({
@@ -33,7 +35,7 @@ class CreateUserService {
       throw new GenericError('Username já existe');
     }
 
-    const encryptedPassword = await hash(password, 8);
+    const encryptedPassword = await this.hashProvider.generateHash(password);
 
     const user = await this.userRepository.create({
       username,

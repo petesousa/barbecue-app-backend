@@ -1,9 +1,9 @@
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
 import authConfig from '@config/auth';
 import GenericError from '@shared/errors/GenericError';
+import IHashProvider from '@modules/user/providers/HashProvider/model/IHashProvider';
 import IUserRepository from '../repository/IUserRepository';
 
 interface ICreateSessionRequestDTO {
@@ -26,6 +26,9 @@ class CreateSessionService {
   constructor(
     @inject('UserRepository')
     private userRepository: IUserRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async run({
@@ -38,7 +41,10 @@ class CreateSessionService {
       throw new GenericError('Credenciais inválidas', 401);
     }
 
-    const passwordMatches = await compare(password, user.password);
+    const passwordMatches = await this.hashProvider.compareHash(
+      password,
+      user.password,
+    );
     if (!passwordMatches) {
       throw new GenericError('Credenciais inválidas', 401);
     }

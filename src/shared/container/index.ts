@@ -1,5 +1,7 @@
 import { container } from 'tsyringe';
 
+import '@modules/user/providers';
+
 import IBarbecueRepository from '@modules/barbecue/repository/IBarbecueRepository';
 import BarbecueRepository from '@modules/barbecue/infra/typeorm/repository/BarbecueRepository';
 
