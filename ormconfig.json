@@ -6,12 +6,12 @@
   "password": "bbqappdocker",
   "database": "barbecue_app_db",
   "entities": [
-    "./src/entity/*.ts"
+    "./src/modules/**/infra/typeorm/entity/*.ts"
   ],
   "migrations": [
-    "./src/database/migrations/*.ts"
+    "./src/shared/infra/typeorm/migrations/*.ts"
   ],
   "cli": {
-    "migrationsDir": "./src/database/migrations"
+    "migrationsDir": "./src/shared/infra/typeorm/migrations"
   }
 }
