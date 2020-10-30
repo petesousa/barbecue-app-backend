@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
+import UpdateBarbecueRSVPDetailsService from '@modules/barbecue/service/UpdateBarbecueRSVPDetailsService';
 import ToggleBarbecueRSVPService from '@modules/barbecue/service/ToggleBarbecueRSVPService';
 
 class BarbecueRSVPController {
@@ -15,6 +16,21 @@ class BarbecueRSVPController {
       willEat,
       rsvp: true,
       hasPaid: false,
+    });
+
+    return response.json(barbecueRSVP);
+  }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    const { barbecueRSVPId, willEat, willDrink } = request.body;
+    const updateBarbecueRSVP = container.resolve(
+      UpdateBarbecueRSVPDetailsService,
+    );
+    const barbecueRSVP = await updateBarbecueRSVP.run({
+      barbecueRSVPId,
+      loggedInUserId: request.user.id,
+      willDrink,
+      willEat,
     });
 
     return response.json(barbecueRSVP);
