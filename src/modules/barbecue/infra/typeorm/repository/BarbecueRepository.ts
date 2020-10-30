@@ -21,6 +21,12 @@ class BarbecueRepository implements IBarbecueRepository {
     return barbecue;
   }
 
+  public async findById(id: string): Promise<Barbecue | undefined> {
+    const findBarbecue = await this.ormRepository.findOne(id);
+
+    return findBarbecue;
+  }
+
   public async findByDate(date: Date): Promise<Barbecue | undefined> {
     const findBarbecue = await this.ormRepository.findOne({
       where: { date },

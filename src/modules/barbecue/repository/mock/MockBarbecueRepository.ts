@@ -20,6 +20,12 @@ class MockBarbecueRepository implements IBarbecueRepository {
     return barbecue;
   }
 
+  public async findById(id: string): Promise<Barbecue | undefined> {
+    const findBarbecue = this.barbecues.find(barbecue => id === barbecue.id);
+
+    return findBarbecue;
+  }
+
   public async findByDate(date: Date): Promise<Barbecue | undefined> {
     const findBarbecue = this.barbecues.find(barbecue =>
       isEqual(date, barbecue.date),
