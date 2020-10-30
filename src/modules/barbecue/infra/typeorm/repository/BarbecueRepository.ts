@@ -14,8 +14,21 @@ class BarbecueRepository implements IBarbecueRepository {
   public async create({
     date,
     organizerId,
+    hour,
+    title,
+    description,
+    mealPrice,
+    drinksPrice,
   }: ICreateBarbecueDTO): Promise<Barbecue> {
-    const barbecue = this.ormRepository.create({ organizerId, date });
+    const barbecue = this.ormRepository.create({
+      organizerId,
+      date,
+      hour,
+      title,
+      description,
+      mealPrice,
+      drinksPrice,
+    });
     await this.ormRepository.save(barbecue);
 
     return barbecue;

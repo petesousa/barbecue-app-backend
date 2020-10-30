@@ -1,4 +1,9 @@
 export default interface ICreateBarbecueDTO {
-  date: Date;
   organizerId: string;
+  date: Date;
+  hour: number;
+  title: string;
+  description: string;
+  mealPrice: number;
+  drinksPrice: number;
 }

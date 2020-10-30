@@ -29,6 +29,11 @@ describe('CreateBarbecueRSVP', () => {
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
     });
 
     const createBarbecueRSVP = new CreateBarbecueRSVPService(
@@ -99,6 +104,11 @@ describe('CreateBarbecueRSVP', () => {
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
     });
 
     const createBarbecueRSVP = new CreateBarbecueRSVPService(

@@ -6,13 +6,25 @@ import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueServi
 
 class BarbecueController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { date } = request.body;
+    const {
+      date,
+      hour,
+      title,
+      description,
+      mealPrice,
+      drinksPrice,
+    } = request.body;
     const parsedDate = parseISO(date);
 
     const createBarbecue = container.resolve(CreateBarbecueService);
     const barbecue = await createBarbecue.run({
       organizerId: request.user.id,
       date: parsedDate,
+      hour,
+      title,
+      description,
+      mealPrice,
+      drinksPrice,
     });
 
     return response.json(barbecue);

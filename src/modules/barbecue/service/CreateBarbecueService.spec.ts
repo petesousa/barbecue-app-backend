@@ -10,6 +10,11 @@ describe('CreateBarbecue', () => {
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: '98234987',
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
     });
     expect(barbecue).toHaveProperty('id');
     expect(barbecue.organizerId).toBe('98234987');
@@ -24,12 +29,22 @@ describe('CreateBarbecue', () => {
     await createBarbecue.run({
       date: barbecueDate,
       organizerId: '98234987',
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
     });
 
     expect(
       createBarbecue.run({
         date: barbecueDate,
         organizerId: '98234987',
+        hour: 18,
+        title: 'MockBarbecue',
+        description: 'this is just a MockBarbecue',
+        mealPrice: 25,
+        drinksPrice: 20,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
@@ -43,6 +58,11 @@ describe('CreateBarbecue', () => {
       createBarbecue.run({
         date: barbecueDate,
         organizerId: '98234987',
+        hour: 18,
+        title: 'MockBarbecue',
+        description: 'this is just a MockBarbecue',
+        mealPrice: 25,
+        drinksPrice: 20,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });

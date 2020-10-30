@@ -1,5 +1,5 @@
 import GenericError from '@shared/errors/GenericError';
-import { isValid, startOfDay } from 'date-fns';
+import { isValid } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import Barbecue from '../infra/typeorm/entity/Barbecue';
@@ -16,20 +16,29 @@ class CreateBarbecueService {
   public async run({
     organizerId,
     date,
+    hour,
+    title,
+    description,
+    mealPrice,
+    drinksPrice,
   }: ICreateBarbecueDTO): Promise<Barbecue> {
     if (!isValid(date)) {
       throw new GenericError('Data Inválida');
     }
-    const barbecueDate = startOfDay(date);
 
-    const isDateBooked = await this.barbecueRepository.findByDate(barbecueDate);
+    const isDateBooked = await this.barbecueRepository.findByDate(date);
     if (isDateBooked) {
       throw new GenericError('Já tem um churras nesse dia!');
     }
 
     const barbecue = await this.barbecueRepository.create({
       organizerId,
-      date: barbecueDate,
+      date,
+      hour,
+      title,
+      description,
+      mealPrice,
+      drinksPrice,
     });
 
     return barbecue;

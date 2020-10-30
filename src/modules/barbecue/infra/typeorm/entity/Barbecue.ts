@@ -20,8 +20,23 @@ class Barbecue {
   @JoinColumn({ name: 'organizerId' })
   organizer: User;
 
-  @Column('timestamp with time zone')
+  @Column('date')
   date: Date;
+
+  @Column()
+  hour: number;
+
+  @Column()
+  title: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  mealPrice: number;
+
+  @Column()
+  drinksPrice: number;
 
   @CreateDateColumn()
   createdAt: Date;
