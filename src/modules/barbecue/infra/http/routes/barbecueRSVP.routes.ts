@@ -9,10 +9,13 @@ barbecueRSVPRouter.use(ensureAuthenticated);
 const barbecueRSVPController = new BarbecueRSVPController();
 
 barbecueRSVPRouter.post('/', barbecueRSVPController.create);
-barbecueRSVPRouter.patch('/', barbecueRSVPController.update);
 barbecueRSVPRouter.delete('/', barbecueRSVPController.delete);
 barbecueRSVPRouter.put(
   '/toggle-will-eat',
+  barbecueRSVPController.toggleWillEat,
+);
+barbecueRSVPRouter.put(
+  '/toggle-will-drink',
   barbecueRSVPController.toggleWillEat,
 );
 barbecueRSVPRouter.put(

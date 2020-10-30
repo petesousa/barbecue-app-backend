@@ -70,7 +70,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
       barbecueRSVP.id,
     );
 
-    expect(newRSVPHasPaid?.rsvp !== hasPaidBeforeToggle);
+    expect(newRSVPHasPaid?.hasPaid).toBe(!hasPaidBeforeToggle);
   });
 
   it('should not be able to toggle RSVP hasPaid for a barbecueRSVP if the barbecue does not belong to the logged in user', async () => {

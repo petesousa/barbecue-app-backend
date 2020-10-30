@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
-import UpdateBarbecueRSVPDetailsService from '@modules/barbecue/service/UpdateBarbecueRSVPDetailsService';
 import ToggleBarbecueRSVPWillEatService from '@modules/barbecue/service/ToggleBarbecueRSVPWillEatService';
 import ToggleBarbecueRSVPHasPaidService from '@modules/barbecue/service/ToggleBarbecueRSVPHasPaidService';
 import DeleteBarbecueRSVPService from '@modules/barbecue/service/DeleteBarbecueRSVPService';
+import ToggleBarbecueRSVPWillDrinkService from '@modules/barbecue/service/ToggleBarbecueRSVPWillDrinkService';
 
 class BarbecueRSVPController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -18,21 +18,6 @@ class BarbecueRSVPController {
       willEat,
       rsvp: true,
       hasPaid: false,
-    });
-
-    return response.json(barbecueRSVP);
-  }
-
-  public async update(request: Request, response: Response): Promise<Response> {
-    const { barbecueRSVPId, willEat, willDrink } = request.body;
-    const updateBarbecueRSVP = container.resolve(
-      UpdateBarbecueRSVPDetailsService,
-    );
-    const barbecueRSVP = await updateBarbecueRSVP.run({
-      barbecueRSVPId,
-      loggedInUserId: request.user.id,
-      willDrink,
-      willEat,
     });
 
     return response.json(barbecueRSVP);
@@ -74,6 +59,22 @@ class BarbecueRSVPController {
       ToggleBarbecueRSVPWillEatService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPWillEat.run({
+      barbecueRSVPId,
+      loggedInUserId: request.user.id,
+    });
+
+    return response.json(barbecueRSVP);
+  }
+
+  public async toggleWillDrink(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { barbecueRSVPId } = request.body;
+    const toggleBarbecueRSVPWillDrink = container.resolve(
+      ToggleBarbecueRSVPWillDrinkService,
+    );
+    const barbecueRSVP = await toggleBarbecueRSVPWillDrink.run({
       barbecueRSVPId,
       loggedInUserId: request.user.id,
     });

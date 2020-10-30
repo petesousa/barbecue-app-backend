@@ -57,16 +57,12 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       mockBarbecueRSVPRepository,
     );
 
-    await toggleBarbecue.run({
+    const newRSVPWillEat = await toggleBarbecue.run({
       barbecueRSVPId: barbecueRSVP.id,
       loggedInUserId: user.id,
     });
 
-    const newRSVPWillEat = await mockBarbecueRSVPRepository.findById(
-      barbecueRSVP.id,
-    );
-
-    expect(newRSVPWillEat?.rsvp !== willEatBeforeToggle);
+    expect(newRSVPWillEat.willEat).toBe(!willEatBeforeToggle);
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if it does not belong to the logged in user', async () => {

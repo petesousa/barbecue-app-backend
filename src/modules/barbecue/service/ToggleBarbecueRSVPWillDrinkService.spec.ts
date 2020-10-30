@@ -7,10 +7,10 @@ import MockBarbecueRSVPRepository from '../repository/mock/MockBarbecueRSVPRepos
 import CreateBarbecueRSVPService from './CreateBarbecueRSVPService';
 import CreateBarbecueService from './CreateBarbecueService';
 
-import UpdateBarbecueRSVPDetailsService from './UpdateBarbecueRSVPDetailsService';
+import ToggleBarbecueRSVPWillDrinkService from './ToggleBarbecueRSVPWillDrinkService';
 
-describe('UpdateBarbecueRSVPDetails', () => {
-  it('should be able to update RSVP details for a barbecueRSVP', async () => {
+describe('ToggleBarbecueRSVPWillDrink', () => {
+  it('should be able to toggle RSVP willDrink for a barbecueRSVP', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -45,33 +45,27 @@ describe('UpdateBarbecueRSVPDetails', () => {
       userId: user.id,
       barbecueId: barbecue.id,
       willEat: true,
-      willDrink: true,
+      willDrink: false,
       hasPaid: false,
       rsvp: true,
     });
 
-    const willEatBefore = true;
-    const willDrinkBefore = true;
+    const willDrinkBeforeToggle = barbecueRSVP.willDrink;
 
-    const updateBarbecue = new UpdateBarbecueRSVPDetailsService(
+    const toggleBarbecueRSVPWillDrink = new ToggleBarbecueRSVPWillDrinkService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
 
-    await updateBarbecue.run({
+    const newRSVP = await toggleBarbecueRSVPWillDrink.run({
       barbecueRSVPId: barbecueRSVP.id,
       loggedInUserId: user.id,
-      willEat: false,
-      willDrink: false,
     });
 
-    const newRSVP = await mockBarbecueRSVPRepository.findById(barbecueRSVP.id);
-
-    expect(newRSVP?.willDrink !== willDrinkBefore);
-    expect(newRSVP?.willEat !== willEatBefore);
+    expect(newRSVP.willDrink).toBe(!willDrinkBeforeToggle);
   });
 
-  it('should not be able to update RSVP Details for a barbecueRSVP if it does not belong to the logged in user', async () => {
+  it('should not be able to toggle RSVP willDrink for a barbecueRSVP if it does not belong to the logged in user', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -106,12 +100,12 @@ describe('UpdateBarbecueRSVPDetails', () => {
       userId: user.id,
       barbecueId: barbecue.id,
       willEat: true,
-      willDrink: true,
+      willDrink: false,
       hasPaid: false,
       rsvp: true,
     });
 
-    const toggleBarbecue = new UpdateBarbecueRSVPDetailsService(
+    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -120,17 +114,15 @@ describe('UpdateBarbecueRSVPDetails', () => {
       toggleBarbecue.run({
         barbecueRSVPId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
-        willEat: false,
-        willDrink: false,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
 
-  it('should not be able to update RSVP details for a barbecueRSVP that does not exist', async () => {
+  it('should not be able to toggle RSVP willDrink for a barbecueRSVP that does not exist', async () => {
     const mockBarbecueRepository = new MockBarbecueRepository();
     const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
 
-    const toggleBarbecue = new UpdateBarbecueRSVPDetailsService(
+    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -139,13 +131,11 @@ describe('UpdateBarbecueRSVPDetails', () => {
       toggleBarbecue.run({
         barbecueRSVPId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
-        willEat: false,
-        willDrink: false,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
 
-  it('should not be able to update RSVP Details for a barbecueRSVP if the barbecue does not exist for any reason', async () => {
+  it('should not be able to toggle RSVP willDrink for a barbecueRSVP if the barbecue does not exist for any reason', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -188,7 +178,7 @@ describe('UpdateBarbecueRSVPDetails', () => {
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
     await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
-    const toggleBarbecue = new UpdateBarbecueRSVPDetailsService(
+    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -197,13 +187,11 @@ describe('UpdateBarbecueRSVPDetails', () => {
       toggleBarbecue.run({
         barbecueRSVPId: barbecueRSVP.id,
         loggedInUserId: user.id,
-        willEat: false,
-        willDrink: false,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
 
-  it('should not be able to update RSVP details for a barbecueRSVP if the barbecue has already happened', async () => {
+  it('should not be able to toggle RSVP willDrink for a barbecueRSVP if the barbecue has already happened', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -246,7 +234,7 @@ describe('UpdateBarbecueRSVPDetails', () => {
     barbecue.date = new Date('2020-01-01');
     await mockBarbecueRepository.save(barbecue);
 
-    const toggleBarbecue = new UpdateBarbecueRSVPDetailsService(
+    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -255,8 +243,6 @@ describe('UpdateBarbecueRSVPDetails', () => {
       toggleBarbecue.run({
         barbecueRSVPId: barbecueRSVP.id,
         loggedInUserId: user.id,
-        willEat: false,
-        willDrink: false,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });

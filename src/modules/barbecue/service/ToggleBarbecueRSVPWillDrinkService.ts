@@ -3,12 +3,12 @@ import { injectable, inject } from 'tsyringe';
 
 import { isBefore, startOfDay } from 'date-fns';
 import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
-import IUpdateBarbecueRSVPDetailsDTO from '../dto/IUpdateBarbecueRSVPDetailsDTO';
+import IToggleBarbecueRSVPWillDrinkDTO from '../dto/IToggleBarbecueRSVPWillDrinkDTO';
 import IBarbecueRepository from '../repository/IBarbecueRepository';
 import IBarbecueRSVPRepository from '../repository/IBarbecueRSVPRepository';
 
 @injectable()
-class UpdateBarbecueRSVPDetailsService {
+class ToggleBarbecueRSVPWillDrinkService {
   constructor(
     @inject('BarbecueRepository')
     private barbecueRepository: IBarbecueRepository,
@@ -20,9 +20,7 @@ class UpdateBarbecueRSVPDetailsService {
   public async run({
     barbecueRSVPId,
     loggedInUserId,
-    willEat,
-    willDrink,
-  }: IUpdateBarbecueRSVPDetailsDTO): Promise<BarbecueRSVP> {
+  }: IToggleBarbecueRSVPWillDrinkDTO): Promise<BarbecueRSVP> {
     const barbecueRSVP = await this.barbecueRSVPRepository.findById(
       barbecueRSVPId,
     );
@@ -46,11 +44,10 @@ class UpdateBarbecueRSVPDetailsService {
       throw new GenericError('Barbecue has already happened');
     }
 
-    barbecueRSVP.willDrink = willDrink;
-    barbecueRSVP.willEat = willEat;
+    barbecueRSVP.willDrink = !barbecueRSVP.willDrink;
 
     return this.barbecueRSVPRepository.save(barbecueRSVP);
   }
 }
 
-export default UpdateBarbecueRSVPDetailsService;
+export default ToggleBarbecueRSVPWillDrinkService;
