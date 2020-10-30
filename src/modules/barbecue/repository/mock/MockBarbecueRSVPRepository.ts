@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import IBarbecueRSVPRepository from '@modules/barbecue/repository/IBarbecueRSVPRepository';
 import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/ICreateBarbecueRSVPDTO';
 import BarbecueRSVP from '@modules/barbecue/infra/typeorm/entity/BarbecueRSVP';
+import { DeleteResult } from 'typeorm';
 
 class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {
   private barbecueRSVPList: BarbecueRSVP[] = [];
@@ -61,6 +62,15 @@ class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {
 
     this.barbecueRSVPList[findIndex] = barbecueRSVP;
     return barbecueRSVP;
+  }
+
+  public async delete(barbecueRSVP: BarbecueRSVP): Promise<DeleteResult> {
+    const findIndex = this.barbecueRSVPList.findIndex(
+      rsvp => rsvp.id === barbecueRSVP.id,
+    );
+
+    this.barbecueRSVPList.splice(findIndex);
+    return new DeleteResult();
   }
 }
 

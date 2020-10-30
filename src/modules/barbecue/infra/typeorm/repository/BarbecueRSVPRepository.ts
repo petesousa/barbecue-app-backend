@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { DeleteResult, getRepository, Repository } from 'typeorm';
 import IBarbecueRSVPRepository from '@modules/barbecue/repository/IBarbecueRSVPRepository';
 import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/ICreateBarbecueRSVPDTO';
 
@@ -61,6 +61,10 @@ class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
 
   public async save(barbecueRSVP: BarbecueRSVP): Promise<BarbecueRSVP> {
     return this.ormRepository.save(barbecueRSVP);
+  }
+
+  public async delete(barbecueRSVP: BarbecueRSVP): Promise<DeleteResult> {
+    return this.ormRepository.delete(barbecueRSVP);
   }
 }
 

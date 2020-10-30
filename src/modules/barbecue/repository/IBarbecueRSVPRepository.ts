@@ -1,3 +1,4 @@
+import { DeleteResult } from 'typeorm';
 import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
 import ICreateBarbecueRSVPDTO from '../dto/ICreateBarbecueRSVPDTO';
 
@@ -10,4 +11,5 @@ export default interface IBarbecueRSVPRepository {
     userId: string,
   ): Promise<BarbecueRSVP | undefined>;
   save(barbecueRSVP: BarbecueRSVP): Promise<BarbecueRSVP>;
+  delete(barbecueRSVP: BarbecueRSVP): Promise<DeleteResult>;
 }

@@ -2,13 +2,14 @@ import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
 import { isBefore, startOfDay } from 'date-fns';
-import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
-import IToggleBarbecueRSVPDTO from '../dto/IToggleBarbecueRSVPDTO';
+import { DeleteResult } from 'typeorm';
+
+import IDeleteBarbecueRSVPDTO from '../dto/IDeleteBarbecueRSVPDTO';
 import IBarbecueRepository from '../repository/IBarbecueRepository';
 import IBarbecueRSVPRepository from '../repository/IBarbecueRSVPRepository';
 
 @injectable()
-class ToggleBarbecueRSVPService {
+class DeleteBarbecueRSVPService {
   constructor(
     @inject('BarbecueRepository')
     private barbecueRepository: IBarbecueRepository,
@@ -20,7 +21,7 @@ class ToggleBarbecueRSVPService {
   public async run({
     barbecueRSVPId,
     loggedInUserId,
-  }: IToggleBarbecueRSVPDTO): Promise<BarbecueRSVP> {
+  }: IDeleteBarbecueRSVPDTO): Promise<DeleteResult> {
     const barbecueRSVP = await this.barbecueRSVPRepository.findById(
       barbecueRSVPId,
     );
@@ -44,10 +45,8 @@ class ToggleBarbecueRSVPService {
       throw new GenericError('Barbecue has already happened');
     }
 
-    barbecueRSVP.rsvp = !barbecueRSVP.rsvp;
-
-    return this.barbecueRSVPRepository.save(barbecueRSVP);
+    return this.barbecueRSVPRepository.delete(barbecueRSVP);
   }
 }
 
-export default ToggleBarbecueRSVPService;
+export default DeleteBarbecueRSVPService;

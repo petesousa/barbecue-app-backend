@@ -7,10 +7,10 @@ import MockBarbecueRSVPRepository from '../repository/mock/MockBarbecueRSVPRepos
 import CreateBarbecueRSVPService from './CreateBarbecueRSVPService';
 import CreateBarbecueService from './CreateBarbecueService';
 
-import ToggleBarbecueRSVPService from './ToggleBarbecueRSVPService';
+import DeleteBarbecueRSVPService from './DeleteBarbecueRSVPService';
 
-describe('ToggleBarbecueRSVP', () => {
-  it('should be able to toggle RSVP for a barbecueRSVP', async () => {
+describe('DeleteBarbecueRSVP', () => {
+  it('should be able to delete a given barbecueRSVP', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -50,24 +50,22 @@ describe('ToggleBarbecueRSVP', () => {
       rsvp: true,
     });
 
-    const rsvpBeforeToggle = true;
-
-    const toggleBarbecue = new ToggleBarbecueRSVPService(
+    const deleteBarbecueRSVP = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
 
-    await toggleBarbecue.run({
+    await deleteBarbecueRSVP.run({
       barbecueRSVPId: barbecueRSVP.id,
       loggedInUserId: user.id,
     });
 
-    const newRSVP = await mockBarbecueRSVPRepository.findById(barbecueRSVP.id);
+    const findRSVP = await mockBarbecueRSVPRepository.findById(barbecueRSVP.id);
 
-    expect(newRSVP?.rsvp !== rsvpBeforeToggle);
+    expect(findRSVP).toBeUndefined();
   });
 
-  it('should not be able to toggle RSVP for a barbecueRSVP if it does not belong to the logged in user', async () => {
+  it('should not be able to delete a barbecueRSVP if it does not belong to the logged in user', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -107,7 +105,7 @@ describe('ToggleBarbecueRSVP', () => {
       rsvp: true,
     });
 
-    const toggleBarbecue = new ToggleBarbecueRSVPService(
+    const toggleBarbecue = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -120,11 +118,11 @@ describe('ToggleBarbecueRSVP', () => {
     ).rejects.toBeInstanceOf(GenericError);
   });
 
-  it('should not be able to toggle RSVP for a barbecueRSVP that does not exist', async () => {
+  it('should not be able to delete a barbecueRSVP that does not exist', async () => {
     const mockBarbecueRepository = new MockBarbecueRepository();
     const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
 
-    const toggleBarbecue = new ToggleBarbecueRSVPService(
+    const toggleBarbecue = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -137,7 +135,7 @@ describe('ToggleBarbecueRSVP', () => {
     ).rejects.toBeInstanceOf(GenericError);
   });
 
-  it('should not be able to toggle RSVP for a barbecueRSVP if the barbecue does not exist for any reason', async () => {
+  it('should not be able to delete a barbecueRSVP if the barbecue does not exist for any reason', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -180,7 +178,7 @@ describe('ToggleBarbecueRSVP', () => {
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
     await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
-    const toggleBarbecue = new ToggleBarbecueRSVPService(
+    const toggleBarbecue = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
@@ -193,7 +191,7 @@ describe('ToggleBarbecueRSVP', () => {
     ).rejects.toBeInstanceOf(GenericError);
   });
 
-  it('should not be able to toggle RSVP for a barbecueRSVP if the barbecue has already happened', async () => {
+  it('should not be able to delete a barbecueRSVP if the barbecue has already happened', async () => {
     const mockUserRepository = new MockUserRepository();
     const mockHashProvider = new MockHashProvider();
     const mockBarbecueRepository = new MockBarbecueRepository();
@@ -236,7 +234,7 @@ describe('ToggleBarbecueRSVP', () => {
     barbecue.date = new Date('2020-01-01');
     await mockBarbecueRepository.save(barbecue);
 
-    const toggleBarbecue = new ToggleBarbecueRSVPService(
+    const toggleBarbecue = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
     );
