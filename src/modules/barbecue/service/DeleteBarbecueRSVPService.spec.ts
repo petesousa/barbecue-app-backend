@@ -9,23 +9,34 @@ import CreateBarbecueService from './CreateBarbecueService';
 
 import DeleteBarbecueRSVPService from './DeleteBarbecueRSVPService';
 
-describe('DeleteBarbecueRSVP', () => {
-  it('should be able to delete a given barbecueRSVP', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
+let mockUserRepository: MockUserRepository;
+let mockHashProvider: MockHashProvider;
+let mockBarbecueRepository: MockBarbecueRepository;
+let mockBarbecueRSVPRepository: MockBarbecueRSVPRepository;
+let createBarbecue: CreateBarbecueService;
+let createBarbecueRSVP: CreateBarbecueRSVPService;
+let createUser: CreateUserService;
 
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
+describe('DeleteBarbecueRSVP', () => {
+  beforeEach(() => {
+    mockUserRepository = new MockUserRepository();
+    mockHashProvider = new MockHashProvider();
+    mockBarbecueRepository = new MockBarbecueRepository();
+    mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
+    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecueRSVP = new CreateBarbecueRSVPService(
+      mockBarbecueRepository,
+      mockBarbecueRSVPRepository,
     );
+    createUser = new CreateUserService(mockUserRepository, mockHashProvider);
+  });
+
+  it('should be able to delete a given barbecueRSVP', async () => {
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -35,11 +46,6 @@ describe('DeleteBarbecueRSVP', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
@@ -66,21 +72,11 @@ describe('DeleteBarbecueRSVP', () => {
   });
 
   it('should not be able to delete a barbecueRSVP if it does not belong to the logged in user', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -90,11 +86,6 @@ describe('DeleteBarbecueRSVP', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
@@ -119,9 +110,6 @@ describe('DeleteBarbecueRSVP', () => {
   });
 
   it('should not be able to delete a barbecueRSVP that does not exist', async () => {
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
     const toggleBarbecue = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
@@ -136,21 +124,11 @@ describe('DeleteBarbecueRSVP', () => {
   });
 
   it('should not be able to delete a barbecueRSVP if the barbecue does not exist for any reason', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -160,11 +138,6 @@ describe('DeleteBarbecueRSVP', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
@@ -192,21 +165,11 @@ describe('DeleteBarbecueRSVP', () => {
   });
 
   it('should not be able to delete a barbecueRSVP if the barbecue has already happened', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -216,11 +179,6 @@ describe('DeleteBarbecueRSVP', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,

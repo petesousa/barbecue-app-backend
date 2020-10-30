@@ -3,10 +3,16 @@ import MockBarbecueRepository from '../repository/mock/MockBarbecueRepository';
 
 import CreateBarbecueService from './CreateBarbecueService';
 
+let mockBarbecueRepository: MockBarbecueRepository;
+let createBarbecue: CreateBarbecueService;
+
 describe('CreateBarbecue', () => {
+  beforeEach(() => {
+    mockBarbecueRepository = new MockBarbecueRepository();
+    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+  });
+
   it('should be able to create a new barbecue', async () => {
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: '98234987',
@@ -21,9 +27,6 @@ describe('CreateBarbecue', () => {
   });
 
   it('should not be able to create two barbecues on the same day', async () => {
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
-
     const barbecueDate = new Date();
 
     await createBarbecue.run({
@@ -50,9 +53,6 @@ describe('CreateBarbecue', () => {
   });
 
   it('should not be able to create a barbecue on an invalid date', async () => {
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
-
     const barbecueDate = new Date('2020-11-34T14:00:00.000Z');
     expect(
       createBarbecue.run({
@@ -68,9 +68,6 @@ describe('CreateBarbecue', () => {
   });
 
   it('should not be able to create a barbecue on a date in the past', async () => {
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
-
     const barbecueDate = new Date('2020-01-01T14:00:00.000Z');
     expect(
       createBarbecue.run({

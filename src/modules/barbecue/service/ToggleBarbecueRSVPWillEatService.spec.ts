@@ -9,23 +9,39 @@ import CreateBarbecueService from './CreateBarbecueService';
 
 import ToggleBarbecueRSVPWillEatService from './ToggleBarbecueRSVPWillEatService';
 
-describe('ToggleBarbecueRSVPWillEat', () => {
-  it('should be able to toggle RSVP willEat for a barbecueRSVP', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
+let mockUserRepository: MockUserRepository;
+let mockHashProvider: MockHashProvider;
+let mockBarbecueRepository: MockBarbecueRepository;
+let mockBarbecueRSVPRepository: MockBarbecueRSVPRepository;
+let createBarbecue: CreateBarbecueService;
+let createBarbecueRSVP: CreateBarbecueRSVPService;
+let createUser: CreateUserService;
+let toggleBarbecueRSVPWillEat: ToggleBarbecueRSVPWillEatService;
 
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
+describe('ToggleBarbecueRSVPWillEat', () => {
+  beforeEach(() => {
+    mockUserRepository = new MockUserRepository();
+    mockHashProvider = new MockHashProvider();
+    mockBarbecueRepository = new MockBarbecueRepository();
+    mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
+    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecueRSVP = new CreateBarbecueRSVPService(
+      mockBarbecueRepository,
+      mockBarbecueRSVPRepository,
     );
+    createUser = new CreateUserService(mockUserRepository, mockHashProvider);
+    toggleBarbecueRSVPWillEat = new ToggleBarbecueRSVPWillEatService(
+      mockBarbecueRepository,
+      mockBarbecueRSVPRepository,
+    );
+  });
+
+  it('should be able to toggle RSVP willEat for a barbecueRSVP', async () => {
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -35,11 +51,6 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
@@ -52,12 +63,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
 
     const willEatBeforeToggle = barbecueRSVP.willEat;
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillEatService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
-    const newRSVPWillEat = await toggleBarbecue.run({
+    const newRSVPWillEat = await toggleBarbecueRSVPWillEat.run({
       barbecueRSVPId: barbecueRSVP.id,
       loggedInUserId: user.id,
     });
@@ -66,21 +72,11 @@ describe('ToggleBarbecueRSVPWillEat', () => {
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if it does not belong to the logged in user', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -90,11 +86,6 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
@@ -105,13 +96,8 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       rsvp: true,
     });
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillEatService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillEat.run({
         barbecueRSVPId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
       }),
@@ -119,16 +105,8 @@ describe('ToggleBarbecueRSVPWillEat', () => {
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP that does not exist', async () => {
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const toggleBarbecue = new ToggleBarbecueRSVPWillEatService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillEat.run({
         barbecueRSVPId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
@@ -136,21 +114,11 @@ describe('ToggleBarbecueRSVPWillEat', () => {
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if the barbecue does not exist for any reason', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -160,11 +128,6 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
@@ -192,21 +155,11 @@ describe('ToggleBarbecueRSVPWillEat', () => {
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if the barbecue has already happened', async () => {
-    const mockUserRepository = new MockUserRepository();
-    const mockHashProvider = new MockHashProvider();
-    const mockBarbecueRepository = new MockBarbecueRepository();
-    const mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
     });
 
-    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
     const barbecue = await createBarbecue.run({
       date: new Date(),
       organizerId: user.id,
@@ -216,11 +169,6 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       mealPrice: 25,
       drinksPrice: 20,
     });
-
-    const createBarbecueRSVP = new CreateBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     const barbecueRSVP = await createBarbecueRSVP.run({
       userId: user.id,
