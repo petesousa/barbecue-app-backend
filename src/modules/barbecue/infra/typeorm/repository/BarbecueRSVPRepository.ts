@@ -64,7 +64,7 @@ class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
   }
 
   public async delete(barbecueRSVP: BarbecueRSVP): Promise<DeleteResult> {
-    return this.ormRepository.delete(barbecueRSVP);
+    return this.ormRepository.delete(barbecueRSVP.id);
   }
 }
 

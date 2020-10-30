@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
 import UpdateBarbecueRSVPDetailsService from '@modules/barbecue/service/UpdateBarbecueRSVPDetailsService';
-import ToggleBarbecueRSVPService from '@modules/barbecue/service/ToggleBarbecueRSVPService';
+import ToggleBarbecueRSVPWillEatService from '@modules/barbecue/service/ToggleBarbecueRSVPWillEatService';
 import ToggleBarbecueRSVPHasPaidService from '@modules/barbecue/service/ToggleBarbecueRSVPHasPaidService';
 import DeleteBarbecueRSVPService from '@modules/barbecue/service/DeleteBarbecueRSVPService';
 
@@ -41,12 +41,12 @@ class BarbecueRSVPController {
   public async delete(request: Request, response: Response): Promise<Response> {
     const { barbecueRSVPId } = request.body;
     const deleteBarbecueRSVP = container.resolve(DeleteBarbecueRSVPService);
-    const barbecueRSVP = await deleteBarbecueRSVP.run({
+    const deleteResult = await deleteBarbecueRSVP.run({
       barbecueRSVPId,
       loggedInUserId: request.user.id,
     });
 
-    return response.json(barbecueRSVP);
+    return response.json(deleteResult);
   }
 
   public async toggleHasPaid(
@@ -58,6 +58,22 @@ class BarbecueRSVPController {
       ToggleBarbecueRSVPHasPaidService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPHasPaid.run({
+      barbecueRSVPId,
+      loggedInUserId: request.user.id,
+    });
+
+    return response.json(barbecueRSVP);
+  }
+
+  public async toggleWillEat(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { barbecueRSVPId } = request.body;
+    const toggleBarbecueRSVPWillEat = container.resolve(
+      ToggleBarbecueRSVPWillEatService,
+    );
+    const barbecueRSVP = await toggleBarbecueRSVPWillEat.run({
       barbecueRSVPId,
       loggedInUserId: request.user.id,
     });
