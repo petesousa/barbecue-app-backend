@@ -3,12 +3,8 @@ import { isValid, startOfDay } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import Barbecue from '../infra/typeorm/entity/Barbecue';
+import ICreateBarbecueDTO from '../dto/ICreateBarbecueDTO';
 import IBarbecueRepository from '../repository/IBarbecueRepository';
-
-interface ICreateBarbecueRequestDTO {
-  organizerId: string;
-  date: Date;
-}
 
 @injectable()
 class CreateBarbecueService {
@@ -20,7 +16,7 @@ class CreateBarbecueService {
   public async run({
     organizerId,
     date,
-  }: ICreateBarbecueRequestDTO): Promise<Barbecue> {
+  }: ICreateBarbecueDTO): Promise<Barbecue> {
     if (!isValid(date)) {
       throw new GenericError('Data Inválida');
     }

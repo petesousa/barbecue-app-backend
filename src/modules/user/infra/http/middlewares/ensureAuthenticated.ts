@@ -3,12 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import authConfig from '@config/auth';
 import GenericError from '@shared/errors/GenericError';
-
-interface tokenPayload {
-  iat: number;
-  exp: number;
-  sub: string;
-}
+import IAuthSessionTokenPayload from '@modules/user/dto/IAuthSessionTokenPayloadDTO';
 
 export default function ensureAuthenticated(
   request: Request,
@@ -26,7 +21,7 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    const { sub } = decoded as tokenPayload;
+    const { sub } = decoded as IAuthSessionTokenPayload;
 
     request.user = {
       id: sub,

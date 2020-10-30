@@ -1,25 +1,12 @@
-import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
-import authConfig from '@config/auth';
 import GenericError from '@shared/errors/GenericError';
 import IHashProvider from '@modules/user/providers/HashProvider/model/IHashProvider';
+import IJWTProvider from '@modules/user/providers/JWTProvider/model/IJWTProvider';
 import IUserRepository from '../repository/IUserRepository';
-
-interface ICreateSessionRequestDTO {
-  username: string;
-  password: string;
-}
-
-interface ILoggedUserResponseDTO {
-  id: string;
-  username: string;
-}
-
-interface ICreateSessionResponseDTO {
-  user: ILoggedUserResponseDTO;
-  token: string;
-}
+import ICreateSessionRequestDTO from '../dto/ICreateSessionRequestDTO';
+import ILoggedUserResponseDTO from '../dto/ILoggedUserResponseDTO';
+import ICreateSessionResponseDTO from '../dto/ICreateSessionResponseDTO';
 
 @injectable()
 class CreateSessionService {
@@ -29,6 +16,9 @@ class CreateSessionService {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('JWTProvider')
+    private jwtProvider: IJWTProvider,
   ) {}
 
   public async run({
@@ -36,7 +26,6 @@ class CreateSessionService {
     password,
   }: ICreateSessionRequestDTO): Promise<ICreateSessionResponseDTO> {
     const user = await this.userRepository.findByUsername(username);
-
     if (!user) {
       throw new GenericError('Credenciais inválidas', 401);
     }
@@ -49,11 +38,7 @@ class CreateSessionService {
       throw new GenericError('Credenciais inválidas', 401);
     }
 
-    const { secret, expiresIn } = authConfig.jwt;
-    const token = sign({}, secret, {
-      subject: user.id,
-      expiresIn,
-    });
+    const token = await this.jwtProvider.generateToken(user.id);
 
     const loggedUserResponse: ILoggedUserResponseDTO = {
       id: user.id,

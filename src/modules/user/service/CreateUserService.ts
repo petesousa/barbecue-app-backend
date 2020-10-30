@@ -3,18 +3,8 @@ import { injectable, inject } from 'tsyringe';
 import GenericError from '@shared/errors/GenericError';
 import IHashProvider from '@modules/user/providers/HashProvider/model/IHashProvider';
 import IUserRepository from '../repository/IUserRepository';
-
-interface ICreateUserRequestDTO {
-  username: string;
-  password: string;
-}
-
-interface ICreateUserResponseDTO {
-  id: string;
-  username: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import ICreateUserDTO from '../dto/ICreateUserDTO';
+import ICreateUserResponseDTO from '../dto/ICreateUserResponseDTO';
 
 @injectable()
 class CreateUserService {
@@ -28,12 +18,9 @@ class CreateUserService {
   public async run({
     username,
     password,
-  }: ICreateUserRequestDTO): Promise<ICreateUserResponseDTO> {
+  }: ICreateUserDTO): Promise<ICreateUserResponseDTO> {
     const isUsernameTaken = await this.userRepository.findByUsername(username);
-
-    if (isUsernameTaken) {
-      throw new GenericError('Username já existe');
-    }
+    if (isUsernameTaken) throw new GenericError('Username já existe');
 
     const encryptedPassword = await this.hashProvider.generateHash(password);
 
@@ -46,7 +33,6 @@ class CreateUserService {
       id: user.id,
       username: user.username,
       createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
     };
 
     return response;
