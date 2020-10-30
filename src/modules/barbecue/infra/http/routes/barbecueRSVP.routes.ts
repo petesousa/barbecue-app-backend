@@ -11,5 +11,9 @@ const barbecueRSVPController = new BarbecueRSVPController();
 barbecueRSVPRouter.post('/', barbecueRSVPController.create);
 barbecueRSVPRouter.patch('/', barbecueRSVPController.update);
 barbecueRSVPRouter.post('/toggle', barbecueRSVPController.toggle);
+barbecueRSVPRouter.post(
+  '/toggle-has-paid',
+  barbecueRSVPController.toggleHasPaid,
+);
 
 export default barbecueRSVPRouter;
