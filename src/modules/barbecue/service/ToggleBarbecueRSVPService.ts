@@ -3,12 +3,12 @@ import { injectable, inject } from 'tsyringe';
 
 import { isBefore, startOfDay } from 'date-fns';
 import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
-import ICreateBarbecueRSVPDTO from '../dto/ICreateBarbecueRSVPDTO';
+import IToggleBarbecueRSVPDTO from '../dto/IToggleBarbecueRSVPDTO';
 import IBarbecueRepository from '../repository/IBarbecueRepository';
 import IBarbecueRSVPRepository from '../repository/IBarbecueRSVPRepository';
 
 @injectable()
-class CreateBarbecueRSVPService {
+class ToggleBarbecueRSVPService {
   constructor(
     @inject('BarbecueRepository')
     private barbecueRepository: IBarbecueRepository,
@@ -18,14 +18,24 @@ class CreateBarbecueRSVPService {
   ) {}
 
   public async run({
-    userId,
-    barbecueId,
-    willEat,
-    willDrink,
-    hasPaid,
-    rsvp,
-  }: ICreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
-    const barbecue = await this.barbecueRepository.findById(barbecueId);
+    barbecueRSVPId,
+    loggedInUserId,
+  }: IToggleBarbecueRSVPDTO): Promise<BarbecueRSVP> {
+    const barbecueRSVP = await this.barbecueRSVPRepository.findById(
+      barbecueRSVPId,
+    );
+    if (!barbecueRSVP) {
+      throw new GenericError('Barbecue RSVP does not exist');
+    }
+
+    if (barbecueRSVP.userId !== loggedInUserId) {
+      throw new GenericError('Barbecue RSVP does not belong to this user');
+    }
+
+    const barbecue = await this.barbecueRepository.findById(
+      barbecueRSVP.barbecueId,
+    );
+
     if (!barbecue) {
       throw new GenericError('Barbecue does not exist');
     }
@@ -34,25 +44,10 @@ class CreateBarbecueRSVPService {
       throw new GenericError('Barbecue has already happened');
     }
 
-    const rsvpExists = await this.barbecueRSVPRepository.rsvpExists(
-      barbecueId,
-      userId,
-    );
-    if (rsvpExists) {
-      throw new GenericError('Barbecue RSVP already exists');
-    }
+    barbecueRSVP.rsvp = !barbecueRSVP.rsvp;
 
-    const barbecueRSVP = await this.barbecueRSVPRepository.create({
-      barbecueId,
-      userId,
-      willDrink,
-      willEat,
-      rsvp,
-      hasPaid,
-    });
-
-    return barbecueRSVP;
+    return this.barbecueRSVPRepository.save(barbecueRSVP);
   }
 }
 
-export default CreateBarbecueRSVPService;
+export default ToggleBarbecueRSVPService;

@@ -9,5 +9,6 @@ barbecueRSVPRouter.use(ensureAuthenticated);
 const barbecueRSVPController = new BarbecueRSVPController();
 
 barbecueRSVPRouter.post('/', barbecueRSVPController.create);
+barbecueRSVPRouter.post('/toggle', barbecueRSVPController.toggle);
 
 export default barbecueRSVPRouter;

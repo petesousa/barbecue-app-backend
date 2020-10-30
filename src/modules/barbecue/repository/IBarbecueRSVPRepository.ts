@@ -3,9 +3,11 @@ import ICreateBarbecueRSVPDTO from '../dto/ICreateBarbecueRSVPDTO';
 
 export default interface IBarbecueRSVPRepository {
   create(data: ICreateBarbecueRSVPDTO): Promise<BarbecueRSVP>;
+  findById(id: string): Promise<BarbecueRSVP | undefined>;
   findByBarbecueId(barbecueId: string): Promise<BarbecueRSVP[] | undefined>;
   rsvpExists(
     barbecueId: string,
     userId: string,
   ): Promise<BarbecueRSVP | undefined>;
+  save(barbecueRSVP: BarbecueRSVP): Promise<BarbecueRSVP>;
 }

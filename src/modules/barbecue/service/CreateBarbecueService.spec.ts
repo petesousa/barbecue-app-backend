@@ -66,4 +66,22 @@ describe('CreateBarbecue', () => {
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
+
+  it('should not be able to create a barbecue on a date in the past', async () => {
+    const mockBarbecueRepository = new MockBarbecueRepository();
+    const createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+
+    const barbecueDate = new Date('2020-01-01T14:00:00.000Z');
+    expect(
+      createBarbecue.run({
+        date: barbecueDate,
+        organizerId: '98234987',
+        hour: 18,
+        title: 'MockBarbecue',
+        description: 'this is just a MockBarbecue',
+        mealPrice: 25,
+        drinksPrice: 20,
+      }),
+    ).rejects.toBeInstanceOf(GenericError);
+  });
 });

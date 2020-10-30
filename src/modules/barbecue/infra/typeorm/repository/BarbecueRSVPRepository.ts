@@ -32,6 +32,12 @@ class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
     return barbecueRSVP;
   }
 
+  public async findById(id: string): Promise<BarbecueRSVP | undefined> {
+    const findBarbecueRSVP = await this.ormRepository.findOne(id);
+
+    return findBarbecueRSVP;
+  }
+
   public async findByBarbecueId(
     barbecueId: string,
   ): Promise<BarbecueRSVP[] | undefined> {
@@ -51,6 +57,10 @@ class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
     });
 
     return findBarbecueRSVP;
+  }
+
+  public async save(barbecueRSVP: BarbecueRSVP): Promise<BarbecueRSVP> {
+    return this.ormRepository.save(barbecueRSVP);
   }
 }
 

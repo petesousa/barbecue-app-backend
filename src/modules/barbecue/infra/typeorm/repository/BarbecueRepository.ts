@@ -47,6 +47,10 @@ class BarbecueRepository implements IBarbecueRepository {
 
     return findBarbecue;
   }
+
+  public async save(barbecue: Barbecue): Promise<Barbecue> {
+    return this.ormRepository.save(barbecue);
+  }
 }
 
 export default BarbecueRepository;

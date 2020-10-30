@@ -33,6 +33,13 @@ class MockBarbecueRepository implements IBarbecueRepository {
 
     return findBarbecue;
   }
+
+  public async save(barbecue: Barbecue): Promise<Barbecue> {
+    const findIndex = this.barbecues.findIndex(it => it.id === barbecue.id);
+
+    this.barbecues[findIndex] = barbecue;
+    return barbecue;
+  }
 }
 
 export default MockBarbecueRepository;

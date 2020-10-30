@@ -26,6 +26,12 @@ class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {
     return barbecueRSVP;
   }
 
+  public async findById(id: string): Promise<BarbecueRSVP | undefined> {
+    const findBarbecue = this.barbecueRSVPList.find(rsvp => rsvp.id === id);
+
+    return findBarbecue;
+  }
+
   public async findByBarbecueId(
     barbecueId: string,
   ): Promise<BarbecueRSVP[] | undefined> {
@@ -46,6 +52,15 @@ class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {
     );
 
     return findBarbecue;
+  }
+
+  public async save(barbecueRSVP: BarbecueRSVP): Promise<BarbecueRSVP> {
+    const findIndex = this.barbecueRSVPList.findIndex(
+      rsvp => rsvp.id === barbecueRSVP.id,
+    );
+
+    this.barbecueRSVPList[findIndex] = barbecueRSVP;
+    return barbecueRSVP;
   }
 }
 
