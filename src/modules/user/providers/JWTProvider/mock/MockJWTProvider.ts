@@ -1,6 +1,6 @@
-import IJWTProvider from '../model/IJWTProvider';
+import JWTProvider from '../model/JWTProvider';
 
-class MockJWTProvider implements IJWTProvider {
+class MockJWTProvider implements JWTProvider {
   public async generateToken(userId: string): Promise<string> {
     return `${userId}-token`;
   }

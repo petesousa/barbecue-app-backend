@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import ensureAuthenticated from '@modules/user/infra/http/middlewares/ensureAuthenticated';
+import ensureAuthenticated from '@modules/user/http/middlewares/ensureAuthenticated';
 
-import BarbecueRSVPController from '../controller/BarbecueRSVPController';
+import BarbecueRSVPController from '@modules/barbecue/http/controller/BarbecueRSVPController';
 
 const barbecueRSVPRouter = Router();
 barbecueRSVPRouter.use(ensureAuthenticated);

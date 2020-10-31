@@ -8,8 +8,8 @@ import BarbecueRepositoryImpl from '@modules/barbecue/repository/implementation/
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 import BarbecueRSVPRepositoryImpl from '@modules/barbecue/repository/implementation/BarbecueRSVPRepositoryImpl';
 
-import IUserRepository from '@modules/user/repository/IUserRepository';
-import UserRepository from '@modules/user/infra/typeorm/repository/UserRepository';
+import UserRepository from '@modules/user/repository/UserRepository';
+import UserRepositoryImpl from '@modules/user/repository/implementation/UserRepositoryImpl';
 
 container.registerSingleton<BarbecueRepository>(
   'BarbecueRepository',
@@ -21,4 +21,7 @@ container.registerSingleton<BarbecueRSVPRepository>(
   BarbecueRSVPRepositoryImpl,
 );
 
-container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
+container.registerSingleton<UserRepository>(
+  'UserRepository',
+  UserRepositoryImpl,
+);

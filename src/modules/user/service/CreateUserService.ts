@@ -2,24 +2,24 @@ import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 
 import GenericError from '@shared/errors/GenericError';
-import IHashProvider from '@modules/user/providers/HashProvider/model/IHashProvider';
-import IUserRepository from '../repository/IUserRepository';
-import ICreateUserDTO from '../dto/ICreateUserDTO';
-import ICreateUserResponseDTO from '../dto/ICreateUserResponseDTO';
+import HashProvider from '@modules/user/providers/HashProvider/model/HashProvider';
+import UserRepository from '@modules/user/repository/UserRepository';
+import CreateUserDTO from '@modules/user/dto/CreateUserDTO';
+import CreateUserResponseDTO from '@modules/user/dto/CreateUserResponseDTO';
 
 @injectable()
 class CreateUserService {
   constructor(
     @inject('UserRepository')
-    private userRepository: IUserRepository,
+    private userRepository: UserRepository,
     @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    private hashProvider: HashProvider,
   ) {}
 
   public async run({
     username,
     password,
-  }: ICreateUserDTO): Promise<ICreateUserResponseDTO> {
+  }: CreateUserDTO): Promise<CreateUserResponseDTO> {
     const isUsernameTaken = await this.userRepository.findByUsername(username);
     if (isUsernameTaken) throw new GenericError('Username já existe');
 
@@ -30,7 +30,7 @@ class CreateUserService {
       password: encryptedPassword,
     });
 
-    const response: ICreateUserResponseDTO = {
+    const response: CreateUserResponseDTO = {
       id: user.id,
       username: user.username,
       createdAt: user.createdAt,

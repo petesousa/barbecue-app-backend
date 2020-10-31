@@ -1,3 +1,3 @@
-export default interface IJWTProvider {
+export default interface JWTProvider {
   generateToken(userId: string): Promise<string>;
 }

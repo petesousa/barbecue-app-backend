@@ -1,30 +1,30 @@
 import { injectable, inject } from 'tsyringe';
 
 import GenericError from '@shared/errors/GenericError';
-import IHashProvider from '@modules/user/providers/HashProvider/model/IHashProvider';
-import IJWTProvider from '@modules/user/providers/JWTProvider/model/IJWTProvider';
-import IUserRepository from '../repository/IUserRepository';
-import ICreateSessionRequestDTO from '../dto/ICreateSessionRequestDTO';
-import ILoggedUserResponseDTO from '../dto/ILoggedUserResponseDTO';
-import ICreateSessionResponseDTO from '../dto/ICreateSessionResponseDTO';
+import HashProvider from '@modules/user/providers/HashProvider/model/HashProvider';
+import JWTProvider from '@modules/user/providers/JWTProvider/model/JWTProvider';
+import UserRepository from '@modules/user/repository/UserRepository';
+import CreateSessionRequestDTO from '@modules/user/dto/CreateSessionRequestDTO';
+import LoggedUserResponseDTO from '@modules/user/dto/LoggedUserResponseDTO';
+import CreateSessionResponseDTO from '@modules/user/dto/CreateSessionResponseDTO';
 
 @injectable()
 class CreateSessionService {
   constructor(
     @inject('UserRepository')
-    private userRepository: IUserRepository,
+    private userRepository: UserRepository,
 
     @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    private hashProvider: HashProvider,
 
     @inject('JWTProvider')
-    private jwtProvider: IJWTProvider,
+    private jwtProvider: JWTProvider,
   ) {}
 
   public async run({
     username,
     password,
-  }: ICreateSessionRequestDTO): Promise<ICreateSessionResponseDTO> {
+  }: CreateSessionRequestDTO): Promise<CreateSessionResponseDTO> {
     const user = await this.userRepository.findByUsername(username);
     if (!user) {
       throw new GenericError('Credenciais inválidas', 401);
@@ -40,12 +40,12 @@ class CreateSessionService {
 
     const token = await this.jwtProvider.generateToken(user.id);
 
-    const loggedUserResponse: ILoggedUserResponseDTO = {
+    const loggedUserResponse: LoggedUserResponseDTO = {
       id: user.id,
       username: user.username,
     };
 
-    const response: ICreateSessionResponseDTO = {
+    const response: CreateSessionResponseDTO = {
       user: loggedUserResponse,
       token,
     };

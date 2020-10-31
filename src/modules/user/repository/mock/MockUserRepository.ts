@@ -1,10 +1,10 @@
 import { v4 } from 'uuid';
 
-import IUserRepository from '@modules/user/repository/IUserRepository';
-import ICreateUserDTO from '@modules/user/dto/ICreateUserDTO';
-import User from '@modules/user/infra/typeorm/entity/User';
+import UserRepository from '@modules/user/repository/UserRepository';
+import CreateUserDTO from '@modules/user/dto/CreateUserDTO';
+import User from '@modules/user/entity/typeorm/User';
 
-class MockUserRepository implements IUserRepository {
+class MockUserRepository implements UserRepository {
   private users: User[] = [];
 
   public async findById(id: string): Promise<User | undefined> {
@@ -17,7 +17,7 @@ class MockUserRepository implements IUserRepository {
     return findUser;
   }
 
-  public async create(userData: ICreateUserDTO): Promise<User> {
+  public async create(userData: CreateUserDTO): Promise<User> {
     const user = new User();
 
     Object.assign(user, { id: v4() }, userData);

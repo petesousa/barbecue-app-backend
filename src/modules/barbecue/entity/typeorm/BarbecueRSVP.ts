@@ -6,7 +6,7 @@ import {
   ManyToMany,
   JoinColumn,
 } from 'typeorm';
-import User from '@modules/user/infra/typeorm/entity/User';
+import User from '@modules/user/entity/typeorm/User';
 import Barbecue from './Barbecue';
 
 @Entity('barbecue_rsvp')

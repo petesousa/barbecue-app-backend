@@ -1,8 +1,8 @@
 import { sign } from 'jsonwebtoken';
 import authConfig from '@config/auth';
-import IJWTProvider from '../model/IJWTProvider';
+import JWTProvider from '../model/JWTProvider';
 
-class DefaultJWTProvider implements IJWTProvider {
+class DefaultJWTProvider implements JWTProvider {
   public async generateToken(userId: string): Promise<string> {
     const { secret, expiresIn } = authConfig.jwt;
     const token = sign({}, secret, {

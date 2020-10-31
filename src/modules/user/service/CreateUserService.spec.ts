@@ -1,8 +1,8 @@
 import GenericError from '@shared/errors/GenericError';
-import MockUserRepository from '../repository/mock/MockUserRepository';
-import MockHashProvider from '../providers/HashProvider/mock/MockHashProvider';
+import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
+import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
 
-import CreateUserService from './CreateUserService';
+import CreateUserService from '@modules/user/service/CreateUserService';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;

@@ -1,6 +1,6 @@
-import IHashProvider from '../model/IHashProvider';
+import HashProvider from '../model/HashProvider';
 
-class MockHashProvider implements IHashProvider {
+class MockHashProvider implements HashProvider {
   public async generateHash(payload: string): Promise<string> {
     return payload;
   }

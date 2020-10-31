@@ -1,10 +1,10 @@
 import GenericError from '@shared/errors/GenericError';
-import MockUserRepository from '../repository/mock/MockUserRepository';
-import MockHashProvider from '../providers/HashProvider/mock/MockHashProvider';
-import MockJWTProvider from '../providers/JWTProvider/mock/MockJWTProvider';
+import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
+import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
+import MockJWTProvider from '@modules/user/providers/JWTProvider/mock/MockJWTProvider';
 
-import CreateUserService from './CreateUserService';
-import CreateSessionService from './CreateSessionService';
+import CreateUserService from '@modules/user/service/CreateUserService';
+import CreateSessionService from '@modules/user/service/CreateSessionService';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
