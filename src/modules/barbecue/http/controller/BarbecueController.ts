@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
+import GetBarbecueDetailsService from '@modules/barbecue/service/GetBarbecueDetailsService';
 
 class BarbecueController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -25,6 +26,21 @@ class BarbecueController {
       description,
       mealPrice,
       drinksPrice,
+    });
+
+    return response.json(barbecue);
+  }
+
+  public async getDetails(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { barbecueId } = request.body;
+
+    const getBarbecueDetails = container.resolve(GetBarbecueDetailsService);
+    const barbecue = await getBarbecueDetails.run({
+      barbecueId,
+      loggedInUserId: request.user.id,
     });
 
     return response.json(barbecue);

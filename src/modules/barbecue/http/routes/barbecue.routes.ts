@@ -15,5 +15,6 @@ const barbecueController = new BarbecueController();
 // });
 
 barbecueRouter.post('/', barbecueController.create);
+barbecueRouter.get('/', barbecueController.getDetails);
 
 export default barbecueRouter;
