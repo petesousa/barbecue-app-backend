@@ -6,7 +6,6 @@
   "password": "bbqappdocker",
   "database": "barbecue_app_db",
   "entities": [
-    "./src/modules/**/infra/typeorm/entity/*.ts",
     "./src/modules/**/entity/typeorm/*.ts"
   ],
   "migrations": [
