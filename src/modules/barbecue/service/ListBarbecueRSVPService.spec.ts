@@ -93,6 +93,8 @@ describe('ListBarbecueRSVP', () => {
         barbecueId: barbecue.id,
         willEat: true,
         willDrink: false,
+        hasPaid: false,
+        rsvp: true,
       },
       {
         id: jamesDoeRSVP.id,
@@ -100,6 +102,8 @@ describe('ListBarbecueRSVP', () => {
         barbecueId: barbecue.id,
         willEat: true,
         willDrink: false,
+        hasPaid: false,
+        rsvp: true,
       },
       {
         id: jimmyDoeRSVP.id,
@@ -107,6 +111,8 @@ describe('ListBarbecueRSVP', () => {
         barbecueId: barbecue.id,
         willEat: true,
         willDrink: false,
+        hasPaid: false,
+        rsvp: true,
       },
     ]);
   });

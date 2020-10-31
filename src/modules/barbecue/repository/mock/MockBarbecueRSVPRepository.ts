@@ -21,6 +21,8 @@ class MockBarbecueRSVPRepository implements BarbecueRSVPRepository {
       userId,
       willDrink,
       willEat,
+      hasPaid: false,
+      rsvp: true,
     });
 
     this.barbecueRSVPList.push(barbecueRSVP);
