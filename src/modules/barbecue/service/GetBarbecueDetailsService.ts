@@ -37,7 +37,7 @@ class GetBarbecueDetailsService {
     const allUsers = await listUsers.run();
 
     const barbecueRSVP = container.resolve(ListBarbecueRSVPService);
-    const rsvp = await barbecueRSVP.run({ barbecueId });
+    const rsvp = await barbecueRSVP.run(barbecueId);
 
     const rsvpUserIds = rsvp?.map(each => each.userId);
     const rsvpList = rsvp?.filter(each => each.userId !== loggedInUserId);
@@ -67,10 +67,12 @@ class GetBarbecueDetailsService {
     return {
       ...barbecue,
       organizer: organizer?.username,
-      loggedInUserRSVP,
-      rsvpList: rsvpDTOList,
-      otherUsers,
       isOrganizerLoggedIn,
+      rsvp: {
+        loggedInUserRSVP,
+        rsvpList: rsvpDTOList,
+        otherUsers,
+      },
     };
   }
 }

@@ -4,7 +4,7 @@ import { injectable, inject } from 'tsyringe';
 import { isBefore, startOfDay } from 'date-fns';
 import { DeleteResult } from 'typeorm';
 
-import DeleteBarbecueRSVPDTO from '@modules/barbecue/dto/DeleteBarbecueRSVPDTO';
+import TouchRSVPRequestDTO from '@modules/barbecue/dto/TouchRSVPRequestDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
@@ -19,12 +19,10 @@ class DeleteBarbecueRSVPService {
   ) {}
 
   public async run({
-    barbecueRSVPId,
+    rsvpId,
     loggedInUserId,
-  }: DeleteBarbecueRSVPDTO): Promise<DeleteResult> {
-    const barbecueRSVP = await this.barbecueRSVPRepository.findById(
-      barbecueRSVPId,
-    );
+  }: TouchRSVPRequestDTO): Promise<DeleteResult> {
+    const barbecueRSVP = await this.barbecueRSVPRepository.findById(rsvpId);
     if (!barbecueRSVP) {
       throw new GenericError('Barbecue RSVP does not exist');
     }

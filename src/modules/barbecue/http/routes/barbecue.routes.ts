@@ -8,13 +8,8 @@ const barbecueRouter = Router();
 barbecueRouter.use(ensureAuthenticated);
 const barbecueController = new BarbecueController();
 
-// barbecueRouter.get('/', async (request, response) => {
-//   const barbecues = await barbecueRepository.find();
-
-//   return response.json(barbecues);
-// });
-
 barbecueRouter.post('/', barbecueController.create);
-barbecueRouter.get('/', barbecueController.getDetails);
+// barbecueRouter.get('/?:month', barbecueController.getBarbecueCalendar);
+barbecueRouter.get('/:barbecueId', barbecueController.getDetails);
 
 export default barbecueRouter;

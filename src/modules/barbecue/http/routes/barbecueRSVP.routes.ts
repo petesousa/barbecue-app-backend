@@ -9,18 +9,9 @@ barbecueRSVPRouter.use(ensureAuthenticated);
 const barbecueRSVPController = new BarbecueRSVPController();
 
 barbecueRSVPRouter.post('/', barbecueRSVPController.create);
-barbecueRSVPRouter.delete('/', barbecueRSVPController.delete);
-barbecueRSVPRouter.put(
-  '/toggle-will-eat',
-  barbecueRSVPController.toggleWillEat,
-);
-barbecueRSVPRouter.put(
-  '/toggle-will-drink',
-  barbecueRSVPController.toggleWillEat,
-);
-barbecueRSVPRouter.put(
-  '/toggle-has-paid',
-  barbecueRSVPController.toggleHasPaid,
-);
+barbecueRSVPRouter.delete('/:rsvpId', barbecueRSVPController.delete);
+barbecueRSVPRouter.put('/:rsvpId/meal', barbecueRSVPController.meal);
+barbecueRSVPRouter.put('/:rsvpId/drinks', barbecueRSVPController.drinks);
+barbecueRSVPRouter.put('/:rsvpId/paid', barbecueRSVPController.paid);
 
 export default barbecueRSVPRouter;

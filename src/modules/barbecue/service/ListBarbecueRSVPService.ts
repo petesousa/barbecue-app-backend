@@ -1,7 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
-import ListBarbecueRSVPDTO from '@modules/barbecue/dto/ListBarbecueRSVPDTO';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
 @injectable()
@@ -11,9 +10,7 @@ class ListBarbecueRSVPService {
     private barbecueRSVPRepository: BarbecueRSVPRepository,
   ) {}
 
-  public async run({
-    barbecueId,
-  }: ListBarbecueRSVPDTO): Promise<BarbecueRSVP[] | undefined> {
+  public async run(barbecueId: string): Promise<BarbecueRSVP[] | undefined> {
     return this.barbecueRSVPRepository.findByBarbecueId(barbecueId);
   }
 }

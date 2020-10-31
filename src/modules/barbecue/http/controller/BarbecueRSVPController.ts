@@ -22,58 +22,49 @@ class BarbecueRSVPController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const { barbecueRSVPId } = request.body;
+    const { rsvpId } = request.params;
     const deleteBarbecueRSVP = container.resolve(DeleteBarbecueRSVPService);
     const deleteResult = await deleteBarbecueRSVP.run({
-      barbecueRSVPId,
+      barbecueRSVPId: rsvpId,
       loggedInUserId: request.user.id,
     });
 
     return response.json(deleteResult);
   }
 
-  public async toggleHasPaid(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const { barbecueRSVPId } = request.body;
+  public async paid(request: Request, response: Response): Promise<Response> {
+    const { rsvpId } = request.params;
     const toggleBarbecueRSVPHasPaid = container.resolve(
       ToggleBarbecueRSVPHasPaidService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPHasPaid.run({
-      barbecueRSVPId,
+      barbecueRSVPId: rsvpId,
       loggedInUserId: request.user.id,
     });
 
     return response.json(barbecueRSVP);
   }
 
-  public async toggleWillEat(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const { barbecueRSVPId } = request.body;
+  public async meal(request: Request, response: Response): Promise<Response> {
+    const { rsvpId } = request.params;
     const toggleBarbecueRSVPWillEat = container.resolve(
       ToggleBarbecueRSVPWillEatService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPWillEat.run({
-      barbecueRSVPId,
+      barbecueRSVPId: rsvpId,
       loggedInUserId: request.user.id,
     });
 
     return response.json(barbecueRSVP);
   }
 
-  public async toggleWillDrink(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const { barbecueRSVPId } = request.body;
+  public async drinks(request: Request, response: Response): Promise<Response> {
+    const { rsvpId } = request.params;
     const toggleBarbecueRSVPWillDrink = container.resolve(
       ToggleBarbecueRSVPWillDrinkService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPWillDrink.run({
-      barbecueRSVPId,
+      barbecueRSVPId: rsvpId,
       loggedInUserId: request.user.id,
     });
 

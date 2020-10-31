@@ -80,11 +80,7 @@ describe('ListBarbecueRSVP', () => {
       willDrink: false,
     });
 
-    const barbecueRSVPList = await listBarbecueRSVP.run({
-      barbecueId: barbecue.id,
-    });
-
-    console.log(barbecueRSVPList);
+    const barbecueRSVPList = await listBarbecueRSVP.run(barbecue.id);
 
     expect(barbecueRSVPList).toEqual([
       {

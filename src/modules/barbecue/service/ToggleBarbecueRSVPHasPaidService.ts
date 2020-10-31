@@ -2,7 +2,7 @@ import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
-import ToggleBarbecueRSVPHasPaidDTO from '@modules/barbecue/dto/ToggleBarbecueRSVPHasPaidDTO';
+import TouchRSVPRequestDTO from '@modules/barbecue/dto/TouchRSVPRequestDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
@@ -17,12 +17,10 @@ class ToggleBarbecueRSVPHasPaidService {
   ) {}
 
   public async run({
-    barbecueRSVPId,
+    rsvpId,
     loggedInUserId,
-  }: ToggleBarbecueRSVPHasPaidDTO): Promise<BarbecueRSVP> {
-    const barbecueRSVP = await this.barbecueRSVPRepository.findById(
-      barbecueRSVPId,
-    );
+  }: TouchRSVPRequestDTO): Promise<BarbecueRSVP> {
+    const barbecueRSVP = await this.barbecueRSVPRepository.findById(rsvpId);
     if (!barbecueRSVP) {
       throw new GenericError('Barbecue RSVP does not exist');
     }

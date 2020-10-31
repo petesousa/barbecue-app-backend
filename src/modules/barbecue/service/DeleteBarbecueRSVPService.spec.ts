@@ -60,7 +60,7 @@ describe('DeleteBarbecueRSVP', () => {
     );
 
     await deleteBarbecueRSVP.run({
-      barbecueRSVPId: barbecueRSVP.id,
+      rsvpId: barbecueRSVP.id,
       loggedInUserId: user.id,
     });
 
@@ -99,7 +99,7 @@ describe('DeleteBarbecueRSVP', () => {
 
     expect(
       toggleBarbecue.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -113,7 +113,7 @@ describe('DeleteBarbecueRSVP', () => {
 
     expect(
       toggleBarbecue.run({
-        barbecueRSVPId: 'anyNonExistentRSVPId',
+        rsvpId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -152,7 +152,7 @@ describe('DeleteBarbecueRSVP', () => {
 
     expect(
       toggleBarbecue.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -191,7 +191,7 @@ describe('DeleteBarbecueRSVP', () => {
 
     expect(
       toggleBarbecue.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
     ).rejects.toBeInstanceOf(GenericError);

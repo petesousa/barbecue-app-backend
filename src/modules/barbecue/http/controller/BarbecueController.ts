@@ -15,8 +15,8 @@ class BarbecueController {
       mealPrice,
       drinksPrice,
     } = request.body;
-    const parsedDate = parseISO(date);
 
+    const parsedDate = parseISO(date);
     const createBarbecue = container.resolve(CreateBarbecueService);
     const barbecue = await createBarbecue.run({
       organizerId: request.user.id,
@@ -35,7 +35,7 @@ class BarbecueController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { barbecueId } = request.body;
+    const { barbecueId } = request.params;
 
     const getBarbecueDetails = container.resolve(GetBarbecueDetailsService);
     const barbecue = await getBarbecueDetails.run({

@@ -66,7 +66,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
     const hasPaidBeforeToggle = false;
 
     await toggleBarbecueRSVPHasPaid.run({
-      barbecueRSVPId: barbecueRSVP.id,
+      rsvpId: barbecueRSVP.id,
       loggedInUserId: johnDoe.id,
     });
 
@@ -106,7 +106,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
 
     expect(
       toggleBarbecueRSVPHasPaid.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: janeDoe.id,
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -115,7 +115,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
   it('should not be able to toggle RSVP hasPaid for a barbecueRSVP that does not exist', async () => {
     expect(
       toggleBarbecueRSVPHasPaid.run({
-        barbecueRSVPId: 'anyNonExistentRSVPId',
+        rsvpId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -149,7 +149,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
 
     expect(
       toggleBarbecueRSVPHasPaid.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
     ).rejects.toBeInstanceOf(GenericError);

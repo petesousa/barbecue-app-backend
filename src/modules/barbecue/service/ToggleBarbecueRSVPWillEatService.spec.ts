@@ -62,7 +62,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
     const willEatBeforeToggle = barbecueRSVP.willEat;
 
     const newRSVPWillEat = await toggleBarbecueRSVPWillEat.run({
-      barbecueRSVPId: barbecueRSVP.id,
+      rsvpId: barbecueRSVP.id,
       loggedInUserId: user.id,
     });
 
@@ -94,7 +94,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
 
     expect(
       toggleBarbecueRSVPWillEat.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -103,7 +103,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
   it('should not be able to toggle RSVP willEat for a barbecueRSVP that does not exist', async () => {
     expect(
       toggleBarbecueRSVPWillEat.run({
-        barbecueRSVPId: 'anyNonExistentRSVPId',
+        rsvpId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -142,7 +142,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
 
     expect(
       toggleBarbecue.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
     ).rejects.toBeInstanceOf(GenericError);
@@ -181,7 +181,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
 
     expect(
       toggleBarbecue.run({
-        barbecueRSVPId: barbecueRSVP.id,
+        rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
     ).rejects.toBeInstanceOf(GenericError);

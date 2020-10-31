@@ -1,6 +1,6 @@
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 import { ListUserDTO } from '@modules/user/dto/ListUserDTO';
-import BarbecueRSVPDTO from './BarbecueRSVPDTO';
+import BarbecueRSVPDetailsDTO from './BarbecueRSVPDetailsDTO';
 
 export default interface BarbecueDetailsDTO {
   id: string;
@@ -12,8 +12,10 @@ export default interface BarbecueDetailsDTO {
   description: string;
   mealPrice: number;
   drinksPrice: number;
-  loggedInUserRSVP: BarbecueRSVP | undefined;
-  rsvpList: BarbecueRSVPDTO[] | undefined;
-  otherUsers: ListUserDTO[];
+  rsvp: {
+    loggedInUserRSVP: BarbecueRSVP | undefined;
+    rsvpList: BarbecueRSVPDetailsDTO[] | undefined;
+    otherUsers: ListUserDTO[];
+  };
   isOrganizerLoggedIn: boolean;
 }

@@ -1,4 +1,5 @@
-export default interface BarbecueRSVPDTO {
+export default interface BarbecueRSVPDetailsDTO {
+  id: string;
   user: {
     userId: string;
     username: string | undefined;
