@@ -1,25 +1,25 @@
 import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
-import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
-import IToggleBarbecueRSVPDTO from '../dto/IToggleBarbecueRSVPDTO';
-import IBarbecueRepository from '../repository/IBarbecueRepository';
-import IBarbecueRSVPRepository from '../repository/IBarbecueRSVPRepository';
+import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
+import ToggleBarbecueRSVPHasPaidDTO from '@modules/barbecue/dto/ToggleBarbecueRSVPHasPaidDTO';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
+import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
 @injectable()
 class ToggleBarbecueRSVPHasPaidService {
   constructor(
     @inject('BarbecueRepository')
-    private barbecueRepository: IBarbecueRepository,
+    private barbecueRepository: BarbecueRepository,
 
     @inject('BarbecueRSVPRepository')
-    private barbecueRSVPRepository: IBarbecueRSVPRepository,
+    private barbecueRSVPRepository: BarbecueRSVPRepository,
   ) {}
 
   public async run({
     barbecueRSVPId,
     loggedInUserId,
-  }: IToggleBarbecueRSVPDTO): Promise<BarbecueRSVP> {
+  }: ToggleBarbecueRSVPHasPaidDTO): Promise<BarbecueRSVP> {
     const barbecueRSVP = await this.barbecueRSVPRepository.findById(
       barbecueRSVPId,
     );

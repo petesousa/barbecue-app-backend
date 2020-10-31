@@ -1,10 +1,10 @@
 import { DeleteResult, getRepository, Repository } from 'typeorm';
-import IBarbecueRSVPRepository from '@modules/barbecue/repository/IBarbecueRSVPRepository';
-import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/ICreateBarbecueRSVPDTO';
+import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
+import CreateBarbecueRSVPDTO from '@modules/barbecue/dto/CreateBarbecueRSVPDTO';
 
-import BarbecueRSVP from '../entity/BarbecueRSVP';
+import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 
-class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
+class BarbecueRSVPRepositoryImpl implements BarbecueRSVPRepository {
   private ormRepository: Repository<BarbecueRSVP>;
 
   constructor() {
@@ -18,7 +18,7 @@ class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
     willEat,
     hasPaid,
     rsvp,
-  }: ICreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
+  }: CreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
     const barbecueRSVP = this.ormRepository.create({
       barbecueId,
       userId,
@@ -68,4 +68,4 @@ class BarbecueRSVPRepository implements IBarbecueRSVPRepository {
   }
 }
 
-export default BarbecueRSVPRepository;
+export default BarbecueRSVPRepositoryImpl;

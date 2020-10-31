@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import IBarbecueRSVPRepository from '@modules/barbecue/repository/IBarbecueRSVPRepository';
 import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/ICreateBarbecueRSVPDTO';
-import BarbecueRSVP from '@modules/barbecue/infra/typeorm/entity/BarbecueRSVP';
+import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 import { DeleteResult } from 'typeorm';
 
 class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {

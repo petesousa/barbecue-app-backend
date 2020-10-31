@@ -2,23 +2,23 @@ import { container } from 'tsyringe';
 
 import '@modules/user/providers';
 
-import IBarbecueRepository from '@modules/barbecue/repository/IBarbecueRepository';
-import BarbecueRepository from '@modules/barbecue/infra/typeorm/repository/BarbecueRepository';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
+import BarbecueRepositoryImpl from '@modules/barbecue/repository/implementation/BarbecueRepositoryImpl';
 
-import IBarbecueRSVPRepository from '@modules/barbecue/repository/IBarbecueRSVPRepository';
-import BarbecueRSVPRepository from '@modules/barbecue/infra/typeorm/repository/BarbecueRSVPRepository';
+import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
+import BarbecueRSVPRepositoryImpl from '@modules/barbecue/repository/implementation/BarbecueRSVPRepositoryImpl';
 
 import IUserRepository from '@modules/user/repository/IUserRepository';
 import UserRepository from '@modules/user/infra/typeorm/repository/UserRepository';
 
-container.registerSingleton<IBarbecueRepository>(
+container.registerSingleton<BarbecueRepository>(
   'BarbecueRepository',
-  BarbecueRepository,
+  BarbecueRepositoryImpl,
 );
 
-container.registerSingleton<IBarbecueRSVPRepository>(
+container.registerSingleton<BarbecueRSVPRepository>(
   'BarbecueRSVPRepository',
-  BarbecueRSVPRepository,
+  BarbecueRSVPRepositoryImpl,
 );
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);

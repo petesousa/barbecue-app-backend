@@ -2,12 +2,12 @@ import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHash
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import CreateUserService from '@modules/user/service/CreateUserService';
 import GenericError from '@shared/errors/GenericError';
-import MockBarbecueRepository from '../repository/mock/MockBarbecueRepository';
-import MockBarbecueRSVPRepository from '../repository/mock/MockBarbecueRSVPRepository';
-import CreateBarbecueRSVPService from './CreateBarbecueRSVPService';
-import CreateBarbecueService from './CreateBarbecueService';
+import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
+import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBarbecueRSVPRepository';
+import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
+import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
-import ToggleBarbecueRSVPHasPaidService from './ToggleBarbecueRSVPHasPaidService';
+import ToggleBarbecueRSVPHasPaidService from '@modules/barbecue/service/ToggleBarbecueRSVPHasPaidService';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;

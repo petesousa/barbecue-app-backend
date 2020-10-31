@@ -1,7 +1,7 @@
 import GenericError from '@shared/errors/GenericError';
-import MockBarbecueRepository from '../repository/mock/MockBarbecueRepository';
+import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
 
-import CreateBarbecueService from './CreateBarbecueService';
+import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
 let mockBarbecueRepository: MockBarbecueRepository;
 let createBarbecue: CreateBarbecueService;

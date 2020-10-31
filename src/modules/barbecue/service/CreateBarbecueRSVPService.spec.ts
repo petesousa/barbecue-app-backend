@@ -3,11 +3,11 @@ import CreateUserService from '@modules/user/service/CreateUserService';
 
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import GenericError from '@shared/errors/GenericError';
-import MockBarbecueRepository from '../repository/mock/MockBarbecueRepository';
-import MockBarbecueRSVPRepository from '../repository/mock/MockBarbecueRSVPRepository';
+import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
+import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBarbecueRSVPRepository';
 
-import CreateBarbecueService from './CreateBarbecueService';
-import CreateBarbecueRSVPService from './CreateBarbecueRSVPService';
+import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
+import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;

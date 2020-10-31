@@ -1,10 +1,10 @@
 import { getRepository, Repository } from 'typeorm';
-import IBarbecueRepository from '@modules/barbecue/repository/IBarbecueRepository';
-import ICreateBarbecueDTO from '@modules/barbecue/dto/ICreateBarbecueDTO';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
+import CreateBarbecueDTO from '@modules/barbecue/dto/CreateBarbecueDTO';
 
-import Barbecue from '../entity/Barbecue';
+import Barbecue from '@modules/barbecue/entity/typeorm/Barbecue';
 
-class BarbecueRepository implements IBarbecueRepository {
+class BarbecueRepositoryImpl implements BarbecueRepository {
   private ormRepository: Repository<Barbecue>;
 
   constructor() {
@@ -19,7 +19,7 @@ class BarbecueRepository implements IBarbecueRepository {
     description,
     mealPrice,
     drinksPrice,
-  }: ICreateBarbecueDTO): Promise<Barbecue> {
+  }: CreateBarbecueDTO): Promise<Barbecue> {
     const barbecue = this.ormRepository.create({
       organizerId,
       date,
@@ -53,4 +53,4 @@ class BarbecueRepository implements IBarbecueRepository {
   }
 }
 
-export default BarbecueRepository;
+export default BarbecueRepositoryImpl;

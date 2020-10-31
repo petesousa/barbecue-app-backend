@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import barbecueRouter from '@modules/barbecue/infra/http/routes/barbecue.routes';
+import barbecueRouter from '@modules/barbecue/http/routes/barbecue.routes';
 import userRouter from '@modules/user/infra/http/routes/user.routes';
 import sessionRouter from '@modules/user/infra/http/routes/session.routes';
-import barbecueRSVPRouter from '@modules/barbecue/infra/http/routes/barbecueRSVP.routes';
+import barbecueRSVPRouter from '@modules/barbecue/http/routes/barbecueRSVP.routes';
 
 const routes = Router();
 

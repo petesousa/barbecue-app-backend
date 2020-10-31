@@ -2,15 +2,15 @@ import GenericError from '@shared/errors/GenericError';
 import { isValid, isBefore, startOfDay } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
-import Barbecue from '../infra/typeorm/entity/Barbecue';
-import ICreateBarbecueDTO from '../dto/ICreateBarbecueDTO';
-import IBarbecueRepository from '../repository/IBarbecueRepository';
+import Barbecue from '@modules/barbecue/entity/typeorm/Barbecue';
+import CreateBarbecueDTO from '@modules/barbecue/dto/CreateBarbecueDTO';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 
 @injectable()
 class CreateBarbecueService {
   constructor(
     @inject('BarbecueRepository')
-    private barbecueRepository: IBarbecueRepository,
+    private barbecueRepository: BarbecueRepository,
   ) {}
 
   public async run({
@@ -21,7 +21,7 @@ class CreateBarbecueService {
     description,
     mealPrice,
     drinksPrice,
-  }: ICreateBarbecueDTO): Promise<Barbecue> {
+  }: CreateBarbecueDTO): Promise<Barbecue> {
     if (!isValid(date)) {
       throw new GenericError('Data Inválida!');
     }

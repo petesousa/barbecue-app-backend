@@ -1,4 +1,4 @@
-export default interface ICreateBarbecueRSVPDTO {
+export default interface CreateBarbecueRSVPDTO {
   userId: string;
   barbecueId: string;
   willDrink: boolean;

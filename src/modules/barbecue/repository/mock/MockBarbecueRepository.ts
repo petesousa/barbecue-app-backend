@@ -3,7 +3,7 @@ import { isEqual } from 'date-fns';
 import IBarbecueRepository from '@modules/barbecue/repository/IBarbecueRepository';
 import ICreateBarbecueDTO from '@modules/barbecue/dto/ICreateBarbecueDTO';
 
-import Barbecue from '@modules/barbecue/infra/typeorm/entity/Barbecue';
+import Barbecue from '@modules/barbecue/entity/typeorm/Barbecue';
 
 class MockBarbecueRepository implements IBarbecueRepository {
   private barbecues: Barbecue[] = [];

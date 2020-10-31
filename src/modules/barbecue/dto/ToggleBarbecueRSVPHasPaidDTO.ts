@@ -1,4 +1,4 @@
-export default interface IDeleteBarbecueRSVPDTO {
+export default interface ToggleBarbecueRSVPDTO {
   barbecueRSVPId: string;
   loggedInUserId: string;
 }

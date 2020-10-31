@@ -1,9 +1,9 @@
 import { DeleteResult } from 'typeorm';
-import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
-import ICreateBarbecueRSVPDTO from '../dto/ICreateBarbecueRSVPDTO';
+import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
+import CreateBarbecueRSVPDTO from '../dto/CreateBarbecueRSVPDTO';
 
-export default interface IBarbecueRSVPRepository {
-  create(data: ICreateBarbecueRSVPDTO): Promise<BarbecueRSVP>;
+export default interface BarbecueRSVPRepository {
+  create(data: CreateBarbecueRSVPDTO): Promise<BarbecueRSVP>;
   findById(id: string): Promise<BarbecueRSVP | undefined>;
   findByBarbecueId(barbecueId: string): Promise<BarbecueRSVP[] | undefined>;
   rsvpExists(

@@ -2,19 +2,19 @@ import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
 import { isBefore, startOfDay } from 'date-fns';
-import BarbecueRSVP from '../infra/typeorm/entity/BarbecueRSVP';
-import ICreateBarbecueRSVPDTO from '../dto/ICreateBarbecueRSVPDTO';
-import IBarbecueRepository from '../repository/IBarbecueRepository';
-import IBarbecueRSVPRepository from '../repository/IBarbecueRSVPRepository';
+import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
+import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/CreateBarbecueRSVPDTO';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
+import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
 @injectable()
 class CreateBarbecueRSVPService {
   constructor(
     @inject('BarbecueRepository')
-    private barbecueRepository: IBarbecueRepository,
+    private barbecueRepository: BarbecueRepository,
 
     @inject('BarbecueRSVPRepository')
-    private barbecueRSVPRepository: IBarbecueRSVPRepository,
+    private barbecueRSVPRepository: BarbecueRSVPRepository,
   ) {}
 
   public async run({

@@ -4,24 +4,24 @@ import { injectable, inject } from 'tsyringe';
 import { isBefore, startOfDay } from 'date-fns';
 import { DeleteResult } from 'typeorm';
 
-import IDeleteBarbecueRSVPDTO from '../dto/IDeleteBarbecueRSVPDTO';
-import IBarbecueRepository from '../repository/IBarbecueRepository';
-import IBarbecueRSVPRepository from '../repository/IBarbecueRSVPRepository';
+import DeleteBarbecueRSVPDTO from '@modules/barbecue/dto/DeleteBarbecueRSVPDTO';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
+import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
 @injectable()
 class DeleteBarbecueRSVPService {
   constructor(
     @inject('BarbecueRepository')
-    private barbecueRepository: IBarbecueRepository,
+    private barbecueRepository: BarbecueRepository,
 
     @inject('BarbecueRSVPRepository')
-    private barbecueRSVPRepository: IBarbecueRSVPRepository,
+    private barbecueRSVPRepository: BarbecueRSVPRepository,
   ) {}
 
   public async run({
     barbecueRSVPId,
     loggedInUserId,
-  }: IDeleteBarbecueRSVPDTO): Promise<DeleteResult> {
+  }: DeleteBarbecueRSVPDTO): Promise<DeleteResult> {
     const barbecueRSVP = await this.barbecueRSVPRepository.findById(
       barbecueRSVPId,
     );

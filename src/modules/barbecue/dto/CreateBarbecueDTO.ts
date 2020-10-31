@@ -1,4 +1,4 @@
-export default interface ICreateBarbecueDTO {
+export default interface CreateBarbecueDTO {
   organizerId: string;
   date: Date;
   hour: number;
