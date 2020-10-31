@@ -7,6 +7,10 @@ import User from '@modules/user/entity/typeorm/User';
 class MockUserRepository implements UserRepository {
   private users: User[] = [];
 
+  public async all(): Promise<User[]> {
+    return this.users;
+  }
+
   public async findById(id: string): Promise<User | undefined> {
     const findUser = this.users.find(user => user.id === id);
     return findUser;

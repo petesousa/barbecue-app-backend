@@ -11,6 +11,11 @@ class UserRepositoryImpl implements UserRepository {
     this.ormRepository = getRepository(User);
   }
 
+  public async all(): Promise<User[]> {
+    const users = this.ormRepository.find();
+    return users;
+  }
+
   public async create({ username, password }: CreateUserDTO): Promise<User> {
     const user = this.ormRepository.create({ username, password });
     await this.ormRepository.save(user);
