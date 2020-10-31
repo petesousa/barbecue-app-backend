@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 
 import { isBefore, startOfDay } from 'date-fns';
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
-import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/CreateBarbecueRSVPDTO';
+import CreateBarbecueRSVPDTO from '@modules/barbecue/dto/CreateBarbecueRSVPDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 
@@ -22,9 +22,7 @@ class CreateBarbecueRSVPService {
     barbecueId,
     willEat,
     willDrink,
-    hasPaid,
-    rsvp,
-  }: ICreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
+  }: CreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
     const barbecue = await this.barbecueRepository.findById(barbecueId);
     if (!barbecue) {
       throw new GenericError('Barbecue does not exist');
@@ -47,8 +45,6 @@ class CreateBarbecueRSVPService {
       userId,
       willDrink,
       willEat,
-      rsvp,
-      hasPaid,
     });
 
     return barbecueRSVP;

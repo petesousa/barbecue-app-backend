@@ -52,8 +52,6 @@ describe('DeleteBarbecueRSVP', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     const deleteBarbecueRSVP = new DeleteBarbecueRSVPService(
@@ -92,8 +90,6 @@ describe('DeleteBarbecueRSVP', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     const toggleBarbecue = new DeleteBarbecueRSVPService(
@@ -144,8 +140,6 @@ describe('DeleteBarbecueRSVP', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
@@ -185,8 +179,6 @@ describe('DeleteBarbecueRSVP', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     barbecue.date = new Date('2020-01-01');

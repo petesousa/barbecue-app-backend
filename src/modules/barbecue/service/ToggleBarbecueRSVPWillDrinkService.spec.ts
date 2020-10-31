@@ -57,8 +57,6 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     const willDrinkBeforeToggle = barbecueRSVP.willDrink;
@@ -92,8 +90,6 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
@@ -139,8 +135,6 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
@@ -180,8 +174,6 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     barbecue.date = new Date('2020-01-01');

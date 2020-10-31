@@ -54,8 +54,6 @@ describe('CreateBarbecueRSVP', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
     expect(barbecueRSVP).toHaveProperty('id');
     expect(barbecueRSVP.barbecueId).toBe(barbecue.id);
@@ -77,8 +75,6 @@ describe('CreateBarbecueRSVP', () => {
         barbecueId: '873981278291',
         willEat: true,
         willDrink: false,
-        hasPaid: false,
-        rsvp: true,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
@@ -112,8 +108,6 @@ describe('CreateBarbecueRSVP', () => {
         barbecueId: barbecue.id,
         willEat: true,
         willDrink: false,
-        hasPaid: false,
-        rsvp: true,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
@@ -143,8 +137,6 @@ describe('CreateBarbecueRSVP', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
     expect(barbecueRSVP).toHaveProperty('id');
     expect(barbecueRSVP.barbecueId).toBe(barbecue.id);
@@ -155,8 +147,6 @@ describe('CreateBarbecueRSVP', () => {
         barbecueId: barbecue.id,
         willEat: true,
         willDrink: false,
-        hasPaid: false,
-        rsvp: true,
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });

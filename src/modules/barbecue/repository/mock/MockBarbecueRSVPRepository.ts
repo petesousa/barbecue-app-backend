@@ -1,10 +1,10 @@
 import { v4 } from 'uuid';
-import IBarbecueRSVPRepository from '@modules/barbecue/repository/IBarbecueRSVPRepository';
-import ICreateBarbecueRSVPDTO from '@modules/barbecue/dto/ICreateBarbecueRSVPDTO';
+import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
+import CreateBarbecueRSVPDTO from '@modules/barbecue/dto/CreateBarbecueRSVPDTO';
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 import { DeleteResult } from 'typeorm';
 
-class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {
+class MockBarbecueRSVPRepository implements BarbecueRSVPRepository {
   private barbecueRSVPList: BarbecueRSVP[] = [];
 
   public async create({
@@ -12,7 +12,7 @@ class MockBarbecueRSVPRepository implements IBarbecueRSVPRepository {
     userId,
     willDrink,
     willEat,
-  }: ICreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
+  }: CreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
     const barbecueRSVP = new BarbecueRSVP();
 
     Object.assign(barbecueRSVP, {

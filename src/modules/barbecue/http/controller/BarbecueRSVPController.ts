@@ -16,8 +16,6 @@ class BarbecueRSVPController {
       userId: request.user.id,
       willDrink,
       willEat,
-      rsvp: true,
-      hasPaid: false,
     });
 
     return response.json(barbecueRSVP);

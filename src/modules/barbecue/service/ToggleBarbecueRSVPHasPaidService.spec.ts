@@ -61,8 +61,6 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     const hasPaidBeforeToggle = false;
@@ -104,8 +102,6 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     expect(
@@ -146,8 +142,6 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
       barbecueId: barbecue.id,
       willEat: true,
       willDrink: false,
-      hasPaid: false,
-      rsvp: true,
     });
 
     barbecueRSVP.barbecueId = 'wrongBarbecueId';

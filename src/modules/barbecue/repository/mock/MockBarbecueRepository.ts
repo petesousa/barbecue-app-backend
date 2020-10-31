@@ -1,17 +1,17 @@
 import { v4 } from 'uuid';
 import { isEqual } from 'date-fns';
-import IBarbecueRepository from '@modules/barbecue/repository/IBarbecueRepository';
-import ICreateBarbecueDTO from '@modules/barbecue/dto/ICreateBarbecueDTO';
+import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
+import CreateBarbecueDTO from '@modules/barbecue/dto/CreateBarbecueDTO';
 
 import Barbecue from '@modules/barbecue/entity/typeorm/Barbecue';
 
-class MockBarbecueRepository implements IBarbecueRepository {
+class MockBarbecueRepository implements BarbecueRepository {
   private barbecues: Barbecue[] = [];
 
   public async create({
     date,
     organizerId,
-  }: ICreateBarbecueDTO): Promise<Barbecue> {
+  }: CreateBarbecueDTO): Promise<Barbecue> {
     const barbecue = new Barbecue();
 
     Object.assign(barbecue, { id: v4(), date, organizerId });

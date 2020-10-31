@@ -16,16 +16,14 @@ class BarbecueRSVPRepositoryImpl implements BarbecueRSVPRepository {
     userId,
     willDrink,
     willEat,
-    hasPaid,
-    rsvp,
   }: CreateBarbecueRSVPDTO): Promise<BarbecueRSVP> {
     const barbecueRSVP = this.ormRepository.create({
       barbecueId,
       userId,
       willDrink,
       willEat,
-      hasPaid,
-      rsvp,
+      rsvp: true,
+      hasPaid: false,
     });
     await this.ormRepository.save(barbecueRSVP);
 

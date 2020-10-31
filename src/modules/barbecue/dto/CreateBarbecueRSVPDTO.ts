@@ -3,6 +3,4 @@ export default interface CreateBarbecueRSVPDTO {
   barbecueId: string;
   willDrink: boolean;
   willEat: boolean;
-  rsvp: boolean;
-  hasPaid: boolean;
 }
