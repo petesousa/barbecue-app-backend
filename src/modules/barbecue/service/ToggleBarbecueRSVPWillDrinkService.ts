@@ -42,6 +42,10 @@ class ToggleBarbecueRSVPWillDrinkService {
       throw new GenericError('Barbecue has already happened');
     }
 
+    if (barbecueRSVP.willDrink && barbecueRSVP.hasPaid) {
+      throw new GenericError('RSVP Is already paid for');
+    }
+
     barbecueRSVP.willDrink = !barbecueRSVP.willDrink;
 
     return this.barbecueRSVPRepository.save(barbecueRSVP);
