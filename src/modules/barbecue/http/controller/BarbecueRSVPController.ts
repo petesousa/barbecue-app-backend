@@ -18,14 +18,14 @@ class BarbecueRSVPController {
       willEat,
     });
 
-    return response.json(barbecueRSVP);
+    return response.json({ data: barbecueRSVP });
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
     const { rsvpId } = request.params;
     const deleteBarbecueRSVP = container.resolve(DeleteBarbecueRSVPService);
     const deleteResult = await deleteBarbecueRSVP.run({
-      barbecueRSVPId: rsvpId,
+      rsvpId,
       loggedInUserId: request.user.id,
     });
 
@@ -38,11 +38,11 @@ class BarbecueRSVPController {
       ToggleBarbecueRSVPHasPaidService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPHasPaid.run({
-      barbecueRSVPId: rsvpId,
+      rsvpId,
       loggedInUserId: request.user.id,
     });
 
-    return response.json(barbecueRSVP);
+    return response.json({ data: barbecueRSVP });
   }
 
   public async meal(request: Request, response: Response): Promise<Response> {
@@ -51,11 +51,11 @@ class BarbecueRSVPController {
       ToggleBarbecueRSVPWillEatService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPWillEat.run({
-      barbecueRSVPId: rsvpId,
+      rsvpId,
       loggedInUserId: request.user.id,
     });
 
-    return response.json(barbecueRSVP);
+    return response.json({ data: barbecueRSVP });
   }
 
   public async drinks(request: Request, response: Response): Promise<Response> {
@@ -64,11 +64,11 @@ class BarbecueRSVPController {
       ToggleBarbecueRSVPWillDrinkService,
     );
     const barbecueRSVP = await toggleBarbecueRSVPWillDrink.run({
-      barbecueRSVPId: rsvpId,
+      rsvpId,
       loggedInUserId: request.user.id,
     });
 
-    return response.json(barbecueRSVP);
+    return response.json({ data: barbecueRSVP });
   }
 }
 

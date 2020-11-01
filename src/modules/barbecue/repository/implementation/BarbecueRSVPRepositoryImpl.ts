@@ -36,9 +36,7 @@ class BarbecueRSVPRepositoryImpl implements BarbecueRSVPRepository {
     return findBarbecueRSVP;
   }
 
-  public async findByBarbecueId(
-    barbecueId: string,
-  ): Promise<BarbecueRSVP[] | undefined> {
+  public async findByBarbecueId(barbecueId: string): Promise<BarbecueRSVP[]> {
     const findBarbecueRSVPList = await this.ormRepository.find({
       where: { barbecueId },
     });

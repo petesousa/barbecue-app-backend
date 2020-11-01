@@ -5,7 +5,7 @@ import CreateBarbecueRSVPDTO from '../dto/CreateBarbecueRSVPDTO';
 export default interface BarbecueRSVPRepository {
   create(data: CreateBarbecueRSVPDTO): Promise<BarbecueRSVP>;
   findById(id: string): Promise<BarbecueRSVP | undefined>;
-  findByBarbecueId(barbecueId: string): Promise<BarbecueRSVP[] | undefined>;
+  findByBarbecueId(barbecueId: string): Promise<BarbecueRSVP[]>;
   rsvpExists(
     barbecueId: string,
     userId: string,

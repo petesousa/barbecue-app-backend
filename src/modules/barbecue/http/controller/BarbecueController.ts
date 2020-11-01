@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 import GetBarbecueDetailsService from '@modules/barbecue/service/GetBarbecueDetailsService';
+import GetMonthBarbecueListService from '@modules/barbecue/service/GetMonthBarbecueListService';
 
 class BarbecueController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -28,7 +29,7 @@ class BarbecueController {
       drinksPrice,
     });
 
-    return response.json(barbecue);
+    return response.json({ data: barbecue });
   }
 
   public async getDetails(
@@ -43,7 +44,23 @@ class BarbecueController {
       loggedInUserId: request.user.id,
     });
 
-    return response.json(barbecue);
+    return response.json({ data: barbecue });
+  }
+
+  public async listByMonth(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { month, year } = request.body;
+
+    const getMonthBarbecueList = container.resolve(GetMonthBarbecueListService);
+    const barbecues = await getMonthBarbecueList.run({
+      month: Number(month),
+      year: Number(year),
+      loggedInUserId: request.user.id,
+    });
+
+    return response.json({ data: barbecues });
   }
 }
 

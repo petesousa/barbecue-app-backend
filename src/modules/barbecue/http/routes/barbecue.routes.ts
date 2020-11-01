@@ -9,7 +9,7 @@ barbecueRouter.use(ensureAuthenticated);
 const barbecueController = new BarbecueController();
 
 barbecueRouter.post('/', barbecueController.create);
-// barbecueRouter.get('/?:month', barbecueController.getBarbecueCalendar);
+barbecueRouter.get('/', barbecueController.listByMonth);
 barbecueRouter.get('/:barbecueId', barbecueController.getDetails);
 
 export default barbecueRouter;

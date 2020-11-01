@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Raw, Repository } from 'typeorm';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import CreateBarbecueDTO from '@modules/barbecue/dto/CreateBarbecueDTO';
 
@@ -46,6 +46,22 @@ class BarbecueRepositoryImpl implements BarbecueRepository {
     });
 
     return findBarbecue;
+  }
+
+  public async listByMonth(month: number, year: number): Promise<Barbecue[]> {
+    const parsedMonth = String(month).padStart(2, '0');
+    const parsedDate = `${parsedMonth}-${year}`;
+
+    const barbecues = await this.ormRepository.find({
+      where: {
+        date: Raw(
+          dateFieldName =>
+            `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedDate}'`,
+        ),
+      },
+    });
+
+    return barbecues;
   }
 
   public async save(barbecue: Barbecue): Promise<Barbecue> {

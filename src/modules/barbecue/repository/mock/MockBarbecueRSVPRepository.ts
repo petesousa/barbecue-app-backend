@@ -35,9 +35,7 @@ class MockBarbecueRSVPRepository implements BarbecueRSVPRepository {
     return findBarbecue;
   }
 
-  public async findByBarbecueId(
-    barbecueId: string,
-  ): Promise<BarbecueRSVP[] | undefined> {
+  public async findByBarbecueId(barbecueId: string): Promise<BarbecueRSVP[]> {
     const findBarbecue = this.barbecueRSVPList.filter(
       rsvp => barbecueId === rsvp.barbecueId,
     );

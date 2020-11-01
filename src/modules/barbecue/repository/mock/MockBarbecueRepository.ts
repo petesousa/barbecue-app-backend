@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { isEqual } from 'date-fns';
+import { isEqual, getMonth, getYear } from 'date-fns';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import CreateBarbecueDTO from '@modules/barbecue/dto/CreateBarbecueDTO';
 
@@ -32,6 +32,16 @@ class MockBarbecueRepository implements BarbecueRepository {
     );
 
     return findBarbecue;
+  }
+
+  public async listByMonth(month: number, year: number): Promise<Barbecue[]> {
+    const barbecues = await this.barbecues.filter(barbecue => {
+      return (
+        getMonth(barbecue.date) + 1 === month && getYear(barbecue.date) === year
+      );
+    });
+
+    return barbecues;
   }
 
   public async save(barbecue: Barbecue): Promise<Barbecue> {
