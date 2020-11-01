@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 
 import User from '@modules/user/entity/typeorm/User';
 import UserRepository from '@modules/user/repository/UserRepository';
-import { ListUserDTO } from '../dto/ListUserDTO';
+import ListUserDTO from '@modules/user/dto/ListUserDTO';
 
 @injectable()
 class ListUserService {

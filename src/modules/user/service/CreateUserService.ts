@@ -21,7 +21,7 @@ class CreateUserService {
     password,
   }: CreateUserDTO): Promise<CreateUserResponseDTO> {
     const isUsernameTaken = await this.userRepository.findByUsername(username);
-    if (isUsernameTaken) throw new GenericError('Username já existe');
+    if (isUsernameTaken) throw new GenericError('Username is taken');
 
     const encryptedPassword = await this.hashProvider.generateHash(password);
 

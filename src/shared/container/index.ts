@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 
 import '@modules/user/providers';
-import 'shared/providers';
+import '@shared/providers';
 
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRepositoryImpl from '@modules/barbecue/repository/implementation/BarbecueRepositoryImpl';
