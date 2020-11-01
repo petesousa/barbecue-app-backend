@@ -34,11 +34,11 @@ class GetBarbecueDetailsService {
       throw new GenericError('Barbecue does not exist');
     }
 
-    const listUsers = container.resolve(ListUserService);
-    const allUsers = await listUsers.run();
+    const listUserService = container.resolve(ListUserService);
+    const allUsers = await listUserService.run();
 
-    const barbecueRSVP = container.resolve(ListBarbecueRSVPService);
-    const findRsvp = await barbecueRSVP.run(barbecueId);
+    const listBarbecueRSVPService = container.resolve(ListBarbecueRSVPService);
+    const findRsvp = await listBarbecueRSVPService.run(barbecueId);
 
     const rsvpProgress = {
       rsvp: findRsvp.length,
@@ -50,12 +50,14 @@ class GetBarbecueDetailsService {
       paid: 0,
     };
 
-    const rsvpUserIds = findRsvp.map(rsvp => {
+    findRsvp.forEach(rsvp => {
       let total = 0;
       if (rsvp.willDrink) total += barbecue.drinksPrice;
       if (rsvp.willEat) total += barbecue.mealPrice;
       budgetProgress.confirmed += total;
       if (rsvp.hasPaid) budgetProgress.paid += total;
+    });
+    const rsvpUserIds = findRsvp.map(rsvp => {
       return rsvp.userId;
     });
     const rsvpList = findRsvp.filter(item => item.userId !== loggedInUserId);
