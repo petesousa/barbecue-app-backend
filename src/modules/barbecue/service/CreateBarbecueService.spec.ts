@@ -1,9 +1,11 @@
-import GenericError from '@shared/errors/GenericError';
 import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
 
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
 import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
+import InvalidDateException from '@shared/exception/InvalidDateException';
+import DateIsAlreadyBookedException from '../exception/DateIsAlreadyBookedException';
+import CantCreateBarbecueInThePastException from '../exception/CantCreateBarbecueInThePastException';
 
 let mockBarbecueRepository: MockBarbecueRepository;
 let mockDateProvider: MockDateProvider;
@@ -56,7 +58,7 @@ describe('CreateBarbecue', () => {
         mealPrice: 25,
         drinksPrice: 20,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(DateIsAlreadyBookedException);
   });
 
   it('should not be able to create a barbecue on an invalid date', async () => {
@@ -71,7 +73,7 @@ describe('CreateBarbecue', () => {
         mealPrice: 25,
         drinksPrice: 20,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(InvalidDateException);
   });
 
   it('should not be able to create a barbecue on a date in the past', async () => {
@@ -86,6 +88,6 @@ describe('CreateBarbecue', () => {
         mealPrice: 25,
         drinksPrice: 20,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(CantCreateBarbecueInThePastException);
   });
 });

@@ -2,13 +2,15 @@ import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHash
 import CreateUserService from '@modules/user/service/CreateUserService';
 
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
-import GenericError from '@shared/errors/GenericError';
 import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
 import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBarbecueRSVPRepository';
 
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
 import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
+import BarbecueDoesNotExistException from '../exception/BarbecueDoesNotExistException';
+import BarbecueHasAlreadyHappenedException from '../exception/BarbecueHasAlreadyHappenedException';
+import BarbecueRSVPAlreadyExistsException from '../exception/BarbecueRSVPAlreadyExistsException';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -77,7 +79,7 @@ describe('CreateBarbecueRSVP', () => {
         willEat: true,
         willDrink: false,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueDoesNotExistException);
   });
 
   it('should not be able to create a new barbecue RSVP if barbecue has already happened', async () => {
@@ -106,7 +108,7 @@ describe('CreateBarbecueRSVP', () => {
         willEat: true,
         willDrink: false,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueHasAlreadyHappenedException);
   });
 
   it('should not be able to create a new barbecue RSVP if there is an entry with the same barbecueId and userId combination', async () => {
@@ -141,6 +143,6 @@ describe('CreateBarbecueRSVP', () => {
         willEat: true,
         willDrink: false,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueRSVPAlreadyExistsException);
   });
 });

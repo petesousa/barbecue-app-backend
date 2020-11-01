@@ -1,7 +1,6 @@
 import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import CreateUserService from '@modules/user/service/CreateUserService';
-import GenericError from '@shared/errors/GenericError';
 import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
 import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBarbecueRSVPRepository';
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
@@ -9,6 +8,9 @@ import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueServi
 
 import ToggleBarbecueRSVPHasPaidService from '@modules/barbecue/service/ToggleBarbecueRSVPHasPaidService';
 import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
+import BarbecueDoesNotBelongToUserException from '../exception/BarbecueDoesNotBelongToUserException';
+import BarbecueDoesNotExistException from '../exception/BarbecueDoesNotExistException';
+import BarbecueRSVPDoesNotExistException from '../exception/BarbecueRSVPDoesNotExistException';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -116,7 +118,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: janeDoe.id,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueDoesNotBelongToUserException);
   });
 
   it('should not be able to toggle RSVP hasPaid for a barbecueRSVP that does not exist', async () => {
@@ -125,7 +127,7 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
         rsvpId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueRSVPDoesNotExistException);
   });
 
   it('should not be able to toggle RSVP hasPaid for a barbecueRSVP if the barbecue does not exist for any reason', async () => {
@@ -159,6 +161,6 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueDoesNotExistException);
   });
 });

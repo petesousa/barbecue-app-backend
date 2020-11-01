@@ -1,4 +1,3 @@
-import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
@@ -6,6 +5,12 @@ import TouchRSVPRequestDTO from '@modules/barbecue/dto/TouchRSVPRequestDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
+import BarbecueRSVPDoesNotExistException from '../exception/BarbecueRSVPDoesNotExistException';
+import BarbecueRSVPIsPaidForException from '../exception/BarbecueRSVPIsPaidForException';
+import CantEditBarbecueRSVPNotConfirmedException from '../exception/CantEditBarbecueRSVPNotConfirmedException';
+import BarbecueDoesNotExistException from '../exception/BarbecueDoesNotExistException';
+import BarbecueRSVPDoesNotBelongToUserException from '../exception/BarbecueRSVPDoesNotBelongToUserException';
+import BarbecueHasAlreadyHappenedException from '../exception/BarbecueHasAlreadyHappenedException';
 
 @injectable()
 class ToggleBarbecueRSVPWillEatService {
@@ -24,38 +29,25 @@ class ToggleBarbecueRSVPWillEatService {
     rsvpId,
     loggedInUserId,
   }: TouchRSVPRequestDTO): Promise<BarbecueRSVP> {
-    const barbecueRSVP = await this.barbecueRSVPRepository.findById(rsvpId);
-    if (!barbecueRSVP) {
-      throw new GenericError('Barbecue RSVP does not exist');
-    }
+    const rsvp = await this.barbecueRSVPRepository.findById(rsvpId);
+    if (!rsvp) throw new BarbecueRSVPDoesNotExistException();
 
-    if (barbecueRSVP.userId !== loggedInUserId) {
-      throw new GenericError('Barbecue RSVP does not belong to this user');
-    }
+    if (rsvp.userId !== loggedInUserId)
+      throw new BarbecueRSVPDoesNotBelongToUserException();
 
-    if (barbecueRSVP.hasPaid) {
-      throw new GenericError('RSVP Is already paid for');
-    }
+    if (rsvp.hasPaid) throw new BarbecueRSVPIsPaidForException();
 
-    if (!barbecueRSVP.rsvp) {
-      throw new GenericError('Cannot edit RSVP that is not confirmed');
-    }
+    if (!rsvp.rsvp) throw new CantEditBarbecueRSVPNotConfirmedException();
 
-    const barbecue = await this.barbecueRepository.findById(
-      barbecueRSVP.barbecueId,
-    );
+    const barbecue = await this.barbecueRepository.findById(rsvp.barbecueId);
+    if (!barbecue) throw new BarbecueDoesNotExistException();
 
-    if (!barbecue) {
-      throw new GenericError('Barbecue does not exist');
-    }
+    if (this.dateProvider.isDateInThePast(barbecue.date))
+      throw new BarbecueHasAlreadyHappenedException();
 
-    if (this.dateProvider.isDateInThePast(barbecue.date)) {
-      throw new GenericError('Barbecue has already happened');
-    }
+    rsvp.willEat = !rsvp.willEat;
 
-    barbecueRSVP.willEat = !barbecueRSVP.willEat;
-
-    return this.barbecueRSVPRepository.save(barbecueRSVP);
+    return this.barbecueRSVPRepository.save(rsvp);
   }
 }
 

@@ -1,4 +1,4 @@
-class GenericError {
+class GenericException {
   public readonly message: string;
 
   public readonly statusCode: number;
@@ -9,4 +9,4 @@ class GenericError {
   }
 }
 
-export default GenericError;
+export default GenericException;

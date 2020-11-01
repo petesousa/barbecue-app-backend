@@ -2,8 +2,8 @@ import { verify } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 import authConfig from '@config/auth';
-import GenericError from '@shared/errors/GenericError';
 import IAuthSessionTokenPayloadDTO from '@modules/user/dto/AuthSessionTokenPayloadDTO';
+import UnauthorizedAccessException from '@modules/user/exception/UnauthorizedAccessException';
 
 export default function ensureAuthenticated(
   request: Request,
@@ -12,9 +12,7 @@ export default function ensureAuthenticated(
 ): void {
   const authHeader = request.headers.authorization;
 
-  if (!authHeader) {
-    throw new GenericError('O token JWT não existe', 403);
-  }
+  if (!authHeader) throw new UnauthorizedAccessException();
 
   const [, token] = authHeader.split(' ');
 
@@ -29,6 +27,6 @@ export default function ensureAuthenticated(
 
     return next();
   } catch {
-    throw new GenericError('Token JWT inválido', 403);
+    throw new UnauthorizedAccessException();
   }
 }

@@ -1,10 +1,12 @@
-import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 import TouchRSVPRequestDTO from '@modules/barbecue/dto/TouchRSVPRequestDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
+import BarbecueDoesNotBelongToUserException from '../exception/BarbecueDoesNotBelongToUserException';
+import BarbecueDoesNotExistException from '../exception/BarbecueDoesNotExistException';
+import BarbecueRSVPDoesNotExistException from '../exception/BarbecueRSVPDoesNotExistException';
 
 @injectable()
 class ToggleBarbecueRSVPHasPaidService {
@@ -20,26 +22,19 @@ class ToggleBarbecueRSVPHasPaidService {
     rsvpId,
     loggedInUserId,
   }: TouchRSVPRequestDTO): Promise<BarbecueRSVP> {
-    const barbecueRSVP = await this.barbecueRSVPRepository.findById(rsvpId);
-    if (!barbecueRSVP) {
-      throw new GenericError('Barbecue RSVP does not exist');
-    }
+    const rsvp = await this.barbecueRSVPRepository.findById(rsvpId);
+    if (!rsvp) throw new BarbecueRSVPDoesNotExistException();
 
-    const barbecue = await this.barbecueRepository.findById(
-      barbecueRSVP.barbecueId,
-    );
+    const barbecue = await this.barbecueRepository.findById(rsvp.barbecueId);
 
-    if (!barbecue) {
-      throw new GenericError('Barbecue does not exist');
-    }
+    if (!barbecue) throw new BarbecueDoesNotExistException();
 
-    if (barbecue.organizerId !== loggedInUserId) {
-      throw new GenericError('Barbecue does not belong to this user');
-    }
+    if (barbecue.organizerId !== loggedInUserId)
+      throw new BarbecueDoesNotBelongToUserException();
 
-    barbecueRSVP.hasPaid = !barbecueRSVP.hasPaid;
+    rsvp.hasPaid = !rsvp.hasPaid;
 
-    return this.barbecueRSVPRepository.save(barbecueRSVP);
+    return this.barbecueRSVPRepository.save(rsvp);
   }
 }
 

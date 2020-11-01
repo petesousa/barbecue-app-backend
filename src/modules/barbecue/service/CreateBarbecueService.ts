@@ -1,10 +1,12 @@
-import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
 import Barbecue from '@modules/barbecue/entity/typeorm/Barbecue';
 import CreateBarbecueDTO from '@modules/barbecue/dto/CreateBarbecueDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
+import InvalidDateException from '@shared/exception/InvalidDateException';
+import CantCreateBarbecueInThePastException from '../exception/CantCreateBarbecueInThePastException';
+import DateIsAlreadyBookedException from '../exception/DateIsAlreadyBookedException';
 
 @injectable()
 class CreateBarbecueService {
@@ -25,18 +27,13 @@ class CreateBarbecueService {
     mealPrice,
     drinksPrice,
   }: CreateBarbecueDTO): Promise<Barbecue> {
-    if (!this.dateProvider.isDateValid(date)) {
-      throw new GenericError('Invalid date!');
-    }
+    if (!this.dateProvider.isDateValid(date)) throw new InvalidDateException();
 
-    if (this.dateProvider.isDateInThePast(date)) {
-      throw new GenericError('Date in the past!');
-    }
+    if (this.dateProvider.isDateInThePast(date))
+      throw new CantCreateBarbecueInThePastException();
 
     const isDateBooked = await this.barbecueRepository.findByDate(date);
-    if (isDateBooked) {
-      throw new GenericError('Date is already booked!');
-    }
+    if (isDateBooked) throw new DateIsAlreadyBookedException();
 
     const barbecue = await this.barbecueRepository.create({
       organizerId,

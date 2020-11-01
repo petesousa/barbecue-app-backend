@@ -1,10 +1,10 @@
-import GenericError from '@shared/errors/GenericError';
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
 import MockJWTProvider from '@modules/user/providers/JWTProvider/mock/MockJWTProvider';
 
 import CreateUserService from '@modules/user/service/CreateUserService';
 import CreateSessionService from '@modules/user/service/CreateSessionService';
+import InvalidCredentialsException from '../exception/InvalidCredentialsException';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -48,7 +48,7 @@ describe('CreateSession', () => {
         username: 'john.doe',
         password: 'wrongpasswordforthisuser',
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(InvalidCredentialsException);
   });
 
   it('should not be able to log in if user does not exist', async () => {
@@ -57,6 +57,6 @@ describe('CreateSession', () => {
         username: 'john.doe',
         password: 'whatevs',
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(InvalidCredentialsException);
   });
 });

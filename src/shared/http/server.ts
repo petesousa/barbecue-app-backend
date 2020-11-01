@@ -4,7 +4,11 @@ import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 
-import GenericError from '@shared/errors/GenericError';
+import GenericException from '@shared/exception/GenericException';
+import DateException from '@shared/exception/DateException';
+import UserException from '@modules/user/exception/UserException';
+import BarbecueException from '@modules/barbecue/exception/BarbecueException';
+
 import routes from './routes';
 
 import '@shared/container';
@@ -15,7 +19,12 @@ app.use(express.json());
 app.use(routes);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
-  if (err instanceof GenericError) {
+  if (
+    err instanceof GenericException ||
+    err instanceof DateException ||
+    err instanceof UserException ||
+    err instanceof BarbecueException
+  ) {
     return response
       .status(err.statusCode)
       .json({ status: 'error', message: err.message });

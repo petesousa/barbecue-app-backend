@@ -1,8 +1,8 @@
-import GenericError from '@shared/errors/GenericError';
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
 
 import CreateUserService from '@modules/user/service/CreateUserService';
+import UsernameTakeException from '../exception/UsernameTakenException';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -34,6 +34,6 @@ describe('CreateUser', () => {
         username: 'john.doe',
         password: 'whatevs',
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(UsernameTakeException);
   });
 });

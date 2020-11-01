@@ -2,13 +2,18 @@ import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvid
 import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import CreateUserService from '@modules/user/service/CreateUserService';
-import GenericError from '@shared/errors/GenericError';
 import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbecueRepository';
 import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBarbecueRSVPRepository';
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
 import ToggleBarbecueRSVPWillEatService from '@modules/barbecue/service/ToggleBarbecueRSVPWillEatService';
+import BarbecueRSVPDoesNotBelongToUserException from '../exception/BarbecueRSVPDoesNotBelongToUserException';
+import BarbecueRSVPDoesNotExistException from '../exception/BarbecueRSVPDoesNotExistException';
+import BarbecueDoesNotExistException from '../exception/BarbecueDoesNotExistException';
+import BarbecueHasAlreadyHappenedException from '../exception/BarbecueHasAlreadyHappenedException';
+import CantEditBarbecueRSVPNotConfirmedException from '../exception/CantEditBarbecueRSVPNotConfirmedException';
+import BarbecueRSVPIsPaidForException from '../exception/BarbecueRSVPIsPaidForException';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -105,7 +110,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueRSVPDoesNotBelongToUserException);
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP that does not exist', async () => {
@@ -114,7 +119,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
         rsvpId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueRSVPDoesNotExistException);
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if the barbecue does not exist for any reason', async () => {
@@ -148,7 +153,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueDoesNotExistException);
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if the barbecue has already happened', async () => {
@@ -182,7 +187,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueHasAlreadyHappenedException);
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if user has not confirmed RSVP', async () => {
@@ -216,7 +221,7 @@ describe('ToggleBarbecueRSVPWillEat', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(CantEditBarbecueRSVPNotConfirmedException);
   });
 
   it('should not be able to toggle RSVP willEat for a barbecueRSVP if it is already paid for', async () => {
@@ -250,6 +255,6 @@ describe('ToggleBarbecueRSVPWillEat', () => {
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
-    ).rejects.toBeInstanceOf(GenericError);
+    ).rejects.toBeInstanceOf(BarbecueRSVPIsPaidForException);
   });
 });

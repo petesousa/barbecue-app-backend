@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 
-import GenericError from '@shared/errors/GenericError';
 import HashProvider from '@modules/user/providers/HashProvider/model/HashProvider';
 import UserRepository from '@modules/user/repository/UserRepository';
 import CreateUserDTO from '@modules/user/dto/CreateUserDTO';
 import CreateUserResponseDTO from '@modules/user/dto/CreateUserResponseDTO';
+import UsernameTakeException from '@modules/user/exception/UsernameTakenException';
 
 @injectable()
 class CreateUserService {
@@ -21,7 +21,7 @@ class CreateUserService {
     password,
   }: CreateUserDTO): Promise<CreateUserResponseDTO> {
     const isUsernameTaken = await this.userRepository.findByUsername(username);
-    if (isUsernameTaken) throw new GenericError('Username is taken');
+    if (isUsernameTaken) throw new UsernameTakeException();
 
     const encryptedPassword = await this.hashProvider.generateHash(password);
 
