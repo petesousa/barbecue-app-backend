@@ -8,7 +8,7 @@ import GenericError from '@shared/errors/GenericError';
 import routes from './routes';
 
 import '@shared/container';
-import '@shared/infra/typeorm';
+import '@shared/database/typeorm';
 
 const app = express();
 app.use(express.json());
@@ -28,8 +28,4 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     .json({ status: 'error', message: 'Internal server error' });
 });
 
-app.get('/', (request, response) => response.json({ message: 'Hello World' }));
-
-app.listen(3333, () => {
-  console.log('Server started');
-});
+app.listen(3333);
