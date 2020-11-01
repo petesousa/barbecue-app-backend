@@ -30,6 +30,14 @@ class ToggleBarbecueRSVPWillDrinkService {
       throw new GenericError('Barbecue RSVP does not belong to this user');
     }
 
+    if (barbecueRSVP.hasPaid) {
+      throw new GenericError('RSVP Is already paid for');
+    }
+
+    if (!barbecueRSVP.rsvp) {
+      throw new GenericError('Cannot edit RSVP that is not confirmed');
+    }
+
     const barbecue = await this.barbecueRepository.findById(
       barbecueRSVP.barbecueId,
     );
@@ -40,10 +48,6 @@ class ToggleBarbecueRSVPWillDrinkService {
 
     if (isBefore(startOfDay(new Date(barbecue.date)), startOfDay(new Date()))) {
       throw new GenericError('Barbecue has already happened');
-    }
-
-    if (barbecueRSVP.willDrink && barbecueRSVP.hasPaid) {
-      throw new GenericError('RSVP Is already paid for');
     }
 
     barbecueRSVP.willDrink = !barbecueRSVP.willDrink;

@@ -31,6 +31,12 @@ class DeleteBarbecueRSVPService {
       throw new GenericError('Barbecue RSVP does not belong to this user');
     }
 
+    if (barbecueRSVP.hasPaid) {
+      throw new GenericError(
+        'Cannot remove RSVP because it is already paid for',
+      );
+    }
+
     const barbecue = await this.barbecueRepository.findById(
       barbecueRSVP.barbecueId,
     );

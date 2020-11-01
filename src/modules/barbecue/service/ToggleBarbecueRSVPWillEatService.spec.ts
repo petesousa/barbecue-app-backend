@@ -186,4 +186,72 @@ describe('ToggleBarbecueRSVPWillEat', () => {
       }),
     ).rejects.toBeInstanceOf(GenericError);
   });
+
+  it('should not be able to toggle RSVP willEat for a barbecueRSVP if user has not confirmed RSVP', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    const barbecue = await createBarbecue.run({
+      date: new Date(),
+      organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
+    });
+
+    const barbecueRSVP = await createBarbecueRSVP.run({
+      userId: user.id,
+      barbecueId: barbecue.id,
+      willEat: true,
+      willDrink: false,
+    });
+
+    barbecueRSVP.rsvp = false;
+    await mockBarbecueRSVPRepository.save(barbecueRSVP);
+
+    expect(
+      toggleBarbecueRSVPWillEat.run({
+        rsvpId: barbecueRSVP.id,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(GenericError);
+  });
+
+  it('should not be able to toggle RSVP willEat for a barbecueRSVP if it is already paid for', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    const barbecue = await createBarbecue.run({
+      date: new Date(),
+      organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
+    });
+
+    const barbecueRSVP = await createBarbecueRSVP.run({
+      userId: user.id,
+      barbecueId: barbecue.id,
+      willEat: false,
+      willDrink: false,
+    });
+
+    barbecueRSVP.hasPaid = true;
+    await mockBarbecueRSVPRepository.save(barbecueRSVP);
+
+    expect(
+      toggleBarbecueRSVPWillEat.run({
+        rsvpId: barbecueRSVP.id,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(GenericError);
+  });
 });

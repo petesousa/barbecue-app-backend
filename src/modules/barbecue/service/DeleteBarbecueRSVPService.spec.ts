@@ -16,6 +16,7 @@ let mockBarbecueRSVPRepository: MockBarbecueRSVPRepository;
 let createBarbecue: CreateBarbecueService;
 let createBarbecueRSVP: CreateBarbecueRSVPService;
 let createUser: CreateUserService;
+let deleteBarbecueRSVP: DeleteBarbecueRSVPService;
 
 describe('DeleteBarbecueRSVP', () => {
   beforeEach(() => {
@@ -29,6 +30,10 @@ describe('DeleteBarbecueRSVP', () => {
       mockBarbecueRSVPRepository,
     );
     createUser = new CreateUserService(mockUserRepository, mockHashProvider);
+    deleteBarbecueRSVP = new DeleteBarbecueRSVPService(
+      mockBarbecueRepository,
+      mockBarbecueRSVPRepository,
+    );
   });
 
   it('should be able to delete a given barbecueRSVP', async () => {
@@ -53,11 +58,6 @@ describe('DeleteBarbecueRSVP', () => {
       willEat: true,
       willDrink: false,
     });
-
-    const deleteBarbecueRSVP = new DeleteBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
 
     await deleteBarbecueRSVP.run({
       rsvpId: barbecueRSVP.id,
@@ -92,13 +92,8 @@ describe('DeleteBarbecueRSVP', () => {
       willDrink: false,
     });
 
-    const toggleBarbecue = new DeleteBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      deleteBarbecueRSVP.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
       }),
@@ -106,13 +101,8 @@ describe('DeleteBarbecueRSVP', () => {
   });
 
   it('should not be able to delete a barbecueRSVP that does not exist', async () => {
-    const toggleBarbecue = new DeleteBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      deleteBarbecueRSVP.run({
         rsvpId: 'anyNonExistentRSVPId',
         loggedInUserId: 'anyUserId',
       }),
@@ -145,13 +135,8 @@ describe('DeleteBarbecueRSVP', () => {
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
     await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
-    const toggleBarbecue = new DeleteBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      deleteBarbecueRSVP.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
@@ -184,13 +169,42 @@ describe('DeleteBarbecueRSVP', () => {
     barbecue.date = new Date('2020-01-01');
     await mockBarbecueRepository.save(barbecue);
 
-    const toggleBarbecue = new DeleteBarbecueRSVPService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
+    expect(
+      deleteBarbecueRSVP.run({
+        rsvpId: barbecueRSVP.id,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(GenericError);
+  });
+
+  it('should not be able to delete a barbecueRSVP if is already paid for', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    const barbecue = await createBarbecue.run({
+      date: new Date(),
+      organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
+    });
+
+    const barbecueRSVP = await createBarbecueRSVP.run({
+      userId: user.id,
+      barbecueId: barbecue.id,
+      willEat: true,
+      willDrink: false,
+    });
+
+    barbecueRSVP.hasPaid = true;
+    await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
     expect(
-      toggleBarbecue.run({
+      deleteBarbecueRSVP.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),

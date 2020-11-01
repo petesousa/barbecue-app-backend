@@ -92,13 +92,8 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
       willDrink: false,
     });
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillDrink.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: 'wrongUserId',
       }),
@@ -140,13 +135,8 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
     await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillDrink.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
@@ -179,13 +169,76 @@ describe('ToggleBarbecueRSVPWillDrink', () => {
     barbecue.date = new Date('2020-01-01');
     await mockBarbecueRepository.save(barbecue);
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillDrinkService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
+    expect(
+      toggleBarbecueRSVPWillDrink.run({
+        rsvpId: barbecueRSVP.id,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(GenericError);
+  });
+
+  it('should not be able to toggle RSVP willDrink for a barbecueRSVP if the RSVP is already paid for', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    const barbecue = await createBarbecue.run({
+      date: new Date(),
+      organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
+    });
+
+    const barbecueRSVP = await createBarbecueRSVP.run({
+      userId: user.id,
+      barbecueId: barbecue.id,
+      willEat: true,
+      willDrink: false,
+    });
+
+    barbecueRSVP.hasPaid = true;
+    await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillDrink.run({
+        rsvpId: barbecueRSVP.id,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(GenericError);
+  });
+
+  it('should not be able to toggle RSVP willDrink for a barbecueRSVP if the RSVP is not confirmed', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    const barbecue = await createBarbecue.run({
+      date: new Date(),
+      organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 20,
+    });
+
+    const barbecueRSVP = await createBarbecueRSVP.run({
+      userId: user.id,
+      barbecueId: barbecue.id,
+      willEat: true,
+      willDrink: false,
+    });
+
+    barbecueRSVP.rsvp = false;
+    await mockBarbecueRSVPRepository.save(barbecueRSVP);
+
+    expect(
+      toggleBarbecueRSVPWillDrink.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),

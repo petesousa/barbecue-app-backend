@@ -46,16 +46,16 @@ class GetMonthBarbecueListService {
     const monthCalendar = daysArray.map(async day => {
       const findBarbecue = barbecues.filter(each => {
         /*
-          TODO: Change barbecue table on DB to store the date as 'timestamp with time zone'
+          TODO: Change barbecue table on PostgresDB to store the date as 'timestamp with time zone'
           instead of just 'date' so I don't have to take care of this here by adding hours
           before getting the date
         */
         const date = addHours(new Date(each.date), 12);
         const dateDay = getDate(date);
         return dateDay === day;
-      })[0];
+      });
       let barbecue;
-      if (findBarbecue) {
+      if (findBarbecue.length > 0) {
         const {
           id,
           mealPrice,
@@ -64,7 +64,7 @@ class GetMonthBarbecueListService {
           hour,
           title,
           organizerId,
-        } = findBarbecue;
+        } = findBarbecue[0];
         const lowerPrice = mealPrice >= drinksPrice ? drinksPrice : mealPrice;
         const rsvpList = await this.barbecueRSVPRepository.findByBarbecueId(id);
         let rsvp = 0;
