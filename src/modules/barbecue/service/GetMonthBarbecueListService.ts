@@ -1,23 +1,22 @@
 import { container, injectable, inject } from 'tsyringe';
-import { getDaysInMonth, getDate, addHours } from 'date-fns';
 
 import GetMonthBarbecueListRequestDTO from '@modules/barbecue/dto/GetMonthBarbecueListRequestDTO';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
 import CalendarDayContentDTO from '@modules/barbecue/dto/CalendarDayContentDTO';
 
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
-import UserRepository from '@modules/user/repository/UserRepository';
 import ListUserService from '@modules/user/service/ListUserService';
+import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
 
 @injectable()
 class GetMonthBarbecueListService {
   constructor(
-    @inject('UserRepository')
-    private userRepository: UserRepository,
     @inject('BarbecueRepository')
     private barbecueRepository: BarbecueRepository,
     @inject('BarbecueRSVPRepository')
     private barbecueRSVPRepository: BarbecueRSVPRepository,
+    @inject('DateProvider')
+    private dateProvider: DateProvider,
   ) {}
 
   public async run({
@@ -32,28 +31,16 @@ class GetMonthBarbecueListService {
       users.set(user.userId, user.username);
     });
 
-    const daysInMonth = getDaysInMonth(new Date(year, month - 1));
+    const daysInMonth = this.dateProvider.daysInMonth(year, month);
 
     const barbecues = await this.barbecueRepository.listByMonth(month, year);
 
-    const daysArray = Array.from(
-      {
-        length: daysInMonth,
-      },
-      (_, index) => index + 1,
-    );
+    const daysArray = this.dateProvider.daysInMonthArray(daysInMonth);
 
     const monthCalendar = daysArray.map(async day => {
-      const findBarbecue = barbecues.filter(each => {
-        /*
-          TODO: Change barbecue table on PostgresDB to store the date as 'timestamp with time zone'
-          instead of just 'date' so I don't have to take care of this here by adding hours
-          before getting the date
-        */
-        const date = addHours(new Date(each.date), 12);
-        const dateDay = getDate(date);
-        return dateDay === day;
-      });
+      const findBarbecue = barbecues.filter(each =>
+        this.dateProvider.isTheSameDay(each.date, day),
+      );
       let barbecue;
       if (findBarbecue.length > 0) {
         const {

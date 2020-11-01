@@ -1,4 +1,11 @@
-import { addHours, isBefore, isValid, startOfDay } from 'date-fns';
+import {
+  addHours,
+  getDate,
+  getDaysInMonth,
+  isBefore,
+  isValid,
+  startOfDay,
+} from 'date-fns';
 import DateProvider from '../model/DateProvider';
 
 class DefaultDateProvider implements DateProvider {
@@ -10,10 +17,29 @@ class DefaultDateProvider implements DateProvider {
     return isValid(date);
   }
 
-  public isDateInThePast(input: Date): boolean {
-    const date = this.getDateObj(new Date(input));
-    const today = this.getDateObj(new Date());
-    return isBefore(date, today);
+  public isDateInThePast(date: Date): boolean {
+    const dateUTC = this.getDateObj(new Date(date));
+    const todayUTC = this.getDateObj(new Date());
+    return isBefore(dateUTC, todayUTC);
+  }
+
+  public daysInMonth(year: number, month: number): number {
+    return getDaysInMonth(new Date(year, month - 1));
+  }
+
+  public daysInMonthArray(daysInMonth: number): number[] {
+    return Array.from(
+      {
+        length: daysInMonth,
+      },
+      (_, index) => index + 1,
+    );
+  }
+
+  public isTheSameDay(date: Date, day: number): boolean {
+    const dateUTC = this.getDateObj(new Date(date));
+    const dateDay = getDate(dateUTC);
+    return dateDay === day;
   }
 }
 
