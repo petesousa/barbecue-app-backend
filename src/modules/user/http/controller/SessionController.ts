@@ -14,7 +14,7 @@ class SessionController {
       password,
     });
 
-    return response.json(session);
+    return response.json({ data: session });
   }
 }
 
