@@ -2,6 +2,7 @@
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
+import { errors } from 'celebrate';
 import 'express-async-errors';
 
 import GenericException from '@shared/exception/GenericException';
@@ -17,6 +18,8 @@ import '@shared/database/typeorm';
 const app = express();
 app.use(express.json());
 app.use(routes);
+
+app.use(errors());
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (
