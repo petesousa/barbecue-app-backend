@@ -11,6 +11,7 @@ import UserRepository from '@modules/user/repository/UserRepository';
 
 import ListUserService from '@modules/user/service/ListUserService';
 import ListBarbecueRSVPService from '@modules/barbecue/service/ListBarbecueRSVPService';
+import BarbecueRSVPStatusDTO from '../dto/BarbecueRSVPStatusDTO';
 
 @injectable()
 class GetBarbecueDetailsService {
@@ -37,42 +38,63 @@ class GetBarbecueDetailsService {
     const allUsers = await listUsers.run();
 
     const barbecueRSVP = container.resolve(ListBarbecueRSVPService);
-    const rsvp = await barbecueRSVP.run(barbecueId);
+    const findRsvp = await barbecueRSVP.run(barbecueId);
 
-    const rsvpUserIds = rsvp?.map(each => each.userId);
-    const rsvpList = rsvp?.filter(each => each.userId !== loggedInUserId);
+    const rsvpProgress = {
+      rsvp: findRsvp.length,
+      noRSVP: allUsers.length - findRsvp.length,
+    };
 
-    const rsvpDTOList = rsvpList?.map(each => {
-      const rsvpUser = allUsers.find(user => user.userId === each.userId);
+    const budgetProgress = {
+      confirmed: 0,
+      paid: 0,
+    };
+
+    const rsvpUserIds = findRsvp.map(rsvp => {
+      let total = 0;
+      if (rsvp.willDrink) total += barbecue.drinksPrice;
+      if (rsvp.willEat) total += barbecue.mealPrice;
+      budgetProgress.confirmed += total;
+      if (rsvp.hasPaid) budgetProgress.paid += total;
+      return rsvp.userId;
+    });
+    const rsvpList = findRsvp.filter(item => item.userId !== loggedInUserId);
+
+    const rsvpDTOList = rsvpList.map(item => {
+      const rsvpUser = allUsers.find(user => user.userId === item.userId);
       return {
-        ...each,
+        ...item,
         user: {
-          userId: each.userId,
+          userId: item.userId,
           username: rsvpUser?.username,
         },
       };
     });
-
     const otherUsers = allUsers.filter(
       user => !rsvpUserIds?.includes(user.userId),
     );
 
-    const organizer = await this.userRepository.findById(barbecue.organizerId);
-    const isOrganizerLoggedIn = loggedInUserId === barbecue.organizerId;
     const loggedInUserRSVP = await this.barbecueRSVPRepository.rsvpExists(
       barbecueId,
       loggedInUserId,
     );
 
+    const rsvp = {
+      loggedInUserRSVP,
+      rsvpList: rsvpDTOList,
+      otherUsers,
+      rsvpProgress,
+      budgetProgress,
+    } as BarbecueRSVPStatusDTO;
+
+    const organizer = await this.userRepository.findById(barbecue.organizerId);
+    const isOrganizerLoggedIn = loggedInUserId === barbecue.organizerId;
+
     return {
       ...barbecue,
       organizer: organizer?.username,
       isOrganizerLoggedIn,
-      rsvp: {
-        loggedInUserRSVP,
-        rsvpList: rsvpDTOList,
-        otherUsers,
-      },
+      rsvp,
     };
   }
 }

@@ -10,7 +10,7 @@ class ListBarbecueRSVPService {
     private barbecueRSVPRepository: BarbecueRSVPRepository,
   ) {}
 
-  public async run(barbecueId: string): Promise<BarbecueRSVP[] | undefined> {
+  public async run(barbecueId: string): Promise<BarbecueRSVP[]> {
     return this.barbecueRSVPRepository.findByBarbecueId(barbecueId);
   }
 }
