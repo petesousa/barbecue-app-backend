@@ -8,6 +8,7 @@ import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueR
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
 import DeleteBarbecueRSVPService from '@modules/barbecue/service/DeleteBarbecueRSVPService';
+import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -17,22 +18,29 @@ let createBarbecue: CreateBarbecueService;
 let createBarbecueRSVP: CreateBarbecueRSVPService;
 let createUser: CreateUserService;
 let deleteBarbecueRSVP: DeleteBarbecueRSVPService;
+let mockDateProvider: MockDateProvider;
 
 describe('DeleteBarbecueRSVP', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
     mockHashProvider = new MockHashProvider();
+    mockDateProvider = new MockDateProvider();
     mockBarbecueRepository = new MockBarbecueRepository();
     mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecue = new CreateBarbecueService(
+      mockBarbecueRepository,
+      mockDateProvider,
+    );
     createBarbecueRSVP = new CreateBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
     createUser = new CreateUserService(mockUserRepository, mockHashProvider);
     deleteBarbecueRSVP = new DeleteBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
   });
 

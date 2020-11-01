@@ -8,9 +8,11 @@ import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueR
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
 import ToggleBarbecueRSVPHasPaidService from '@modules/barbecue/service/ToggleBarbecueRSVPHasPaidService';
+import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
+let mockDateProvider: MockDateProvider;
 let mockBarbecueRepository: MockBarbecueRepository;
 let mockBarbecueRSVPRepository: MockBarbecueRSVPRepository;
 let createBarbecue: CreateBarbecueService;
@@ -22,12 +24,17 @@ describe('ToggleBarbecueRSVPHasPaidService', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
     mockHashProvider = new MockHashProvider();
+    mockDateProvider = new MockDateProvider();
     mockBarbecueRepository = new MockBarbecueRepository();
     mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecue = new CreateBarbecueService(
+      mockBarbecueRepository,
+      mockDateProvider,
+    );
     createBarbecueRSVP = new CreateBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
     createUser = new CreateUserService(mockUserRepository, mockHashProvider);
     toggleBarbecueRSVPHasPaid = new ToggleBarbecueRSVPHasPaidService(

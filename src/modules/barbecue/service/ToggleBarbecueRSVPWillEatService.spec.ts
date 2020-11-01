@@ -1,3 +1,4 @@
+import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
 import MockHashProvider from '@modules/user/providers/HashProvider/mock/MockHashProvider';
 import MockUserRepository from '@modules/user/repository/mock/MockUserRepository';
 import CreateUserService from '@modules/user/service/CreateUserService';
@@ -17,22 +18,29 @@ let createBarbecue: CreateBarbecueService;
 let createBarbecueRSVP: CreateBarbecueRSVPService;
 let createUser: CreateUserService;
 let toggleBarbecueRSVPWillEat: ToggleBarbecueRSVPWillEatService;
+let mockDateProvider: MockDateProvider;
 
 describe('ToggleBarbecueRSVPWillEat', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
     mockHashProvider = new MockHashProvider();
+    mockDateProvider = new MockDateProvider();
     mockBarbecueRepository = new MockBarbecueRepository();
     mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecue = new CreateBarbecueService(
+      mockBarbecueRepository,
+      mockDateProvider,
+    );
     createBarbecueRSVP = new CreateBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
     createUser = new CreateUserService(mockUserRepository, mockHashProvider);
     toggleBarbecueRSVPWillEat = new ToggleBarbecueRSVPWillEatService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
   });
 
@@ -135,13 +143,8 @@ describe('ToggleBarbecueRSVPWillEat', () => {
     barbecueRSVP.barbecueId = 'wrongBarbecueId';
     await mockBarbecueRSVPRepository.save(barbecueRSVP);
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillEatService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillEat.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),
@@ -174,13 +177,8 @@ describe('ToggleBarbecueRSVPWillEat', () => {
     barbecue.date = new Date('2020-01-01');
     await mockBarbecueRepository.save(barbecue);
 
-    const toggleBarbecue = new ToggleBarbecueRSVPWillEatService(
-      mockBarbecueRepository,
-      mockBarbecueRSVPRepository,
-    );
-
     expect(
-      toggleBarbecue.run({
+      toggleBarbecueRSVPWillEat.run({
         rsvpId: barbecueRSVP.id,
         loggedInUserId: user.id,
       }),

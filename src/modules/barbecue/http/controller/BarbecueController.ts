@@ -17,11 +17,10 @@ class BarbecueController {
       drinksPrice,
     } = request.body;
 
-    const parsedDate = parseISO(date);
     const createBarbecue = container.resolve(CreateBarbecueService);
     const barbecue = await createBarbecue.run({
       organizerId: request.user.id,
-      date: parsedDate,
+      date: parseISO(date),
       hour,
       title,
       description,

@@ -8,32 +8,37 @@ import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBa
 
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
+import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
+let mockDateProvider: MockDateProvider;
 let mockBarbecueRepository: MockBarbecueRepository;
 let mockBarbecueRSVPRepository: MockBarbecueRSVPRepository;
 let createBarbecue: CreateBarbecueService;
 let createBarbecueRSVP: CreateBarbecueRSVPService;
+let createUser: CreateUserService;
 
 describe('CreateBarbecueRSVP', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
     mockHashProvider = new MockHashProvider();
+    mockDateProvider = new MockDateProvider();
     mockBarbecueRepository = new MockBarbecueRepository();
     mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
-    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecue = new CreateBarbecueService(
+      mockBarbecueRepository,
+      mockDateProvider,
+    );
     createBarbecueRSVP = new CreateBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
+    createUser = new CreateUserService(mockUserRepository, mockHashProvider);
   });
 
   it('should be able to create a new barbecue RSVP', async () => {
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
@@ -60,10 +65,6 @@ describe('CreateBarbecueRSVP', () => {
   });
 
   it('should not be able to create a new barbecue RSVP if barbecue does not exist', async () => {
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
@@ -80,10 +81,6 @@ describe('CreateBarbecueRSVP', () => {
   });
 
   it('should not be able to create a new barbecue RSVP if barbecue has already happened', async () => {
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
@@ -113,10 +110,6 @@ describe('CreateBarbecueRSVP', () => {
   });
 
   it('should not be able to create a new barbecue RSVP if there is an entry with the same barbecueId and userId combination', async () => {
-    const createUser = new CreateUserService(
-      mockUserRepository,
-      mockHashProvider,
-    );
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',

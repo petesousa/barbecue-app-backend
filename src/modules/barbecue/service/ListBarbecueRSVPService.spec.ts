@@ -8,9 +8,11 @@ import MockBarbecueRSVPRepository from '@modules/barbecue/repository/mock/MockBa
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 import CreateBarbecueRSVPService from '@modules/barbecue/service/CreateBarbecueRSVPService';
 import ListBarbecueRSVPService from '@modules/barbecue/service/ListBarbecueRSVPService';
+import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
+let mockDateProvider: MockDateProvider;
 let mockBarbecueRepository: MockBarbecueRepository;
 let mockBarbecueRSVPRepository: MockBarbecueRSVPRepository;
 let createBarbecue: CreateBarbecueService;
@@ -22,13 +24,18 @@ describe('ListBarbecueRSVP', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
     mockHashProvider = new MockHashProvider();
+    mockDateProvider = new MockDateProvider();
     mockBarbecueRepository = new MockBarbecueRepository();
     mockBarbecueRSVPRepository = new MockBarbecueRSVPRepository();
     createUser = new CreateUserService(mockUserRepository, mockHashProvider);
-    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    createBarbecue = new CreateBarbecueService(
+      mockBarbecueRepository,
+      mockDateProvider,
+    );
     createBarbecueRSVP = new CreateBarbecueRSVPService(
       mockBarbecueRepository,
       mockBarbecueRSVPRepository,
+      mockDateProvider,
     );
     listBarbecueRSVP = new ListBarbecueRSVPService(mockBarbecueRSVPRepository);
   });

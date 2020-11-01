@@ -3,13 +3,20 @@ import MockBarbecueRepository from '@modules/barbecue/repository/mock/MockBarbec
 
 import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueService';
 
+import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
+
 let mockBarbecueRepository: MockBarbecueRepository;
+let mockDateProvider: MockDateProvider;
 let createBarbecue: CreateBarbecueService;
 
 describe('CreateBarbecue', () => {
   beforeEach(() => {
     mockBarbecueRepository = new MockBarbecueRepository();
-    createBarbecue = new CreateBarbecueService(mockBarbecueRepository);
+    mockDateProvider = new MockDateProvider();
+    createBarbecue = new CreateBarbecueService(
+      mockBarbecueRepository,
+      mockDateProvider,
+    );
   });
 
   it('should be able to create a new barbecue', async () => {

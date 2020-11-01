@@ -1,7 +1,8 @@
 import GenericError from '@shared/errors/GenericError';
 import { injectable, inject } from 'tsyringe';
 
-import { isBefore, startOfDay } from 'date-fns';
+import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
+
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 import TouchRSVPRequestDTO from '@modules/barbecue/dto/TouchRSVPRequestDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
@@ -15,6 +16,9 @@ class ToggleBarbecueRSVPWillDrinkService {
 
     @inject('BarbecueRSVPRepository')
     private barbecueRSVPRepository: BarbecueRSVPRepository,
+
+    @inject('DateProvider')
+    private dateProvider: DateProvider,
   ) {}
 
   public async run({
@@ -46,7 +50,7 @@ class ToggleBarbecueRSVPWillDrinkService {
       throw new GenericError('Barbecue does not exist');
     }
 
-    if (isBefore(startOfDay(new Date(barbecue.date)), startOfDay(new Date()))) {
+    if (this.dateProvider.isDateInThePast(barbecue.date)) {
       throw new GenericError('Barbecue has already happened');
     }
 
