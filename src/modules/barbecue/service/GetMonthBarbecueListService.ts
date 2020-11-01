@@ -43,10 +43,14 @@ class GetMonthBarbecueListService {
       (_, index) => index + 1,
     );
 
-    const monthCalendar = await daysArray.map(async day => {
+    const monthCalendar = daysArray.map(async day => {
       const findBarbecue = barbecues.filter(each => {
-        //
-        const date = addHours(new Date(each.date), 4);
+        /*
+          TODO: Change barbecue table on DB to store the date as 'timestamp with time zone'
+          instead of just 'date' so I don't have to take care of this here by adding hours
+          before getting the date
+        */
+        const date = addHours(new Date(each.date), 12);
         const dateDay = getDate(date);
         return dateDay === day;
       })[0];
