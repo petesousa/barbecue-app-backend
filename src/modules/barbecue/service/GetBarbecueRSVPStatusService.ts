@@ -1,4 +1,4 @@
-import { container, injectable, inject } from 'tsyringe';
+import { injectable, inject } from 'tsyringe';
 
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
@@ -8,10 +8,13 @@ import BarbecueRSVPStatusDTO from '@modules/barbecue/dto/BarbecueRSVPStatusDTO';
 
 import ListUserService from '@modules/user/service/ListUserService';
 import ListBarbecueRSVPService from '@modules/barbecue/service/ListBarbecueRSVPService';
+import UserRepository from '@modules/user/repository/UserRepository';
 
 @injectable()
 class GetBarbecueRSVPStatusService {
   constructor(
+    @inject('UserRepository')
+    private userRepository: UserRepository,
     @inject('BarbecueRepository')
     private barbecueRepository: BarbecueRepository,
     @inject('BarbecueRSVPRepository')
@@ -22,10 +25,12 @@ class GetBarbecueRSVPStatusService {
     barbecue,
     loggedInUserId,
   }: GetBarbecueStatusDTO): Promise<BarbecueRSVPStatusDTO | undefined> {
-    const listUserService = container.resolve(ListUserService);
+    const listUserService = new ListUserService(this.userRepository);
     const allUsers = await listUserService.run();
 
-    const listBarbecueRSVPService = container.resolve(ListBarbecueRSVPService);
+    const listBarbecueRSVPService = new ListBarbecueRSVPService(
+      this.barbecueRSVPRepository,
+    );
     const findRsvp = await listBarbecueRSVPService.run(barbecue.id);
 
     const rsvpProgress = {

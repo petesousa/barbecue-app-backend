@@ -30,6 +30,7 @@ class GetBarbecueDetailsService {
     if (!barbecue) throw new BarbecueDoesNotExistException();
 
     const getBarbecueRSVPStatus = new GetBarbecueRSVPStatusService(
+      this.userRepository,
       this.barbecueRepository,
       this.barbecueRSVPRepository,
     );

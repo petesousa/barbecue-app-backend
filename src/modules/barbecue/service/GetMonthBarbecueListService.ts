@@ -1,4 +1,4 @@
-import { container, injectable, inject } from 'tsyringe';
+import { injectable, inject } from 'tsyringe';
 
 import GetMonthBarbecueListRequestDTO from '@modules/barbecue/dto/GetMonthBarbecueListRequestDTO';
 import BarbecueRSVPRepository from '@modules/barbecue/repository/BarbecueRSVPRepository';
@@ -7,10 +7,13 @@ import CalendarDayContentDTO from '@modules/barbecue/dto/CalendarDayContentDTO';
 import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository';
 import ListUserService from '@modules/user/service/ListUserService';
 import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
+import UserRepository from '@modules/user/repository/UserRepository';
 
 @injectable()
 class GetMonthBarbecueListService {
   constructor(
+    @inject('UserRepository')
+    private userRepository: UserRepository,
     @inject('BarbecueRepository')
     private barbecueRepository: BarbecueRepository,
     @inject('BarbecueRSVPRepository')
@@ -24,7 +27,7 @@ class GetMonthBarbecueListService {
     year,
     loggedInUserId,
   }: GetMonthBarbecueListRequestDTO): Promise<CalendarDayContentDTO[]> {
-    const listUsers = container.resolve(ListUserService);
+    const listUsers = new ListUserService(this.userRepository);
     const allUsers = await listUsers.run();
     const users: Map<string, string> = new Map<string, string>();
     allUsers.forEach(user => {
