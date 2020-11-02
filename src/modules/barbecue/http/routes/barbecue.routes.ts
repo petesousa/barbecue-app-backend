@@ -23,7 +23,7 @@ barbecueRouter.post(
   barbecueController.create,
 );
 
-barbecueRouter.get('/', barbecueController.listByMonth);
+barbecueRouter.get('/by-month', barbecueController.listByMonth);
 
 barbecueRouter.get(
   '/:barbecueId',

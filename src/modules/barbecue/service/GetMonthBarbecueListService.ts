@@ -8,6 +8,8 @@ import BarbecueRepository from '@modules/barbecue/repository/BarbecueRepository'
 import ListUserService from '@modules/user/service/ListUserService';
 import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
 import UserRepository from '@modules/user/repository/UserRepository';
+import InvalidMonthException from '@shared/exception/InvalidMonthException';
+import BeforeStartOfTimeException from '../exception/BeforeStartOfTimeException';
 
 @injectable()
 class GetMonthBarbecueListService {
@@ -33,6 +35,9 @@ class GetMonthBarbecueListService {
     allUsers.forEach(user => {
       users.set(user.userId, user.username);
     });
+
+    if (month > 12 || month < 1) throw new InvalidMonthException();
+    if (year < 2020) throw new BeforeStartOfTimeException();
 
     const daysInMonth = this.dateProvider.daysInMonth(year, month);
 
