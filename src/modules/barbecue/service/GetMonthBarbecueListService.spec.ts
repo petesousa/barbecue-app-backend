@@ -9,7 +9,9 @@ import CreateBarbecueService from '@modules/barbecue/service/CreateBarbecueServi
 import ToggleBarbecueRSVPWillDrinkService from '@modules/barbecue/service/ToggleBarbecueRSVPWillDrinkService';
 import MockDateProvider from '@shared/providers/DateProvider/mock/MockDateProvider';
 import { addHours } from 'date-fns';
+import InvalidMonthException from '@shared/exception/InvalidMonthException';
 import GetMonthBarbecueListService from './GetMonthBarbecueListService';
+import BeforeStartOfTimeException from '../exception/BeforeStartOfTimeException';
 
 let mockUserRepository: MockUserRepository;
 let mockHashProvider: MockHashProvider;
@@ -53,7 +55,7 @@ describe('GetMonthBarbecueList', () => {
     );
   });
 
-  it('should be able to toggle RSVP willDrink for a barbecueRSVP', async () => {
+  it('should be able to get month barbecue list for a given month and year', async () => {
     const user = await createUser.run({
       username: 'john.doe',
       password: 'whatevs',
@@ -111,5 +113,95 @@ describe('GetMonthBarbecueList', () => {
         isOrganizerLoggedIn: true,
       },
     });
+  });
+
+  it('should be able to get month barbecue list for a given month and year and show price range', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    const bbqDate = addHours(new Date(), 12);
+    const barbecue = await createBarbecue.run({
+      date: bbqDate,
+      organizerId: user.id,
+      hour: 18,
+      title: 'MockBarbecue',
+      description: 'this is just a MockBarbecue',
+      mealPrice: 25,
+      drinksPrice: 35,
+    });
+
+    barbecue.mealPrice = 25;
+    barbecue.drinksPrice = 35;
+    await mockBarbecueRepository.save(barbecue);
+
+    const barbecueRSVP = await createBarbecueRSVP.run({
+      userId: user.id,
+      barbecueId: barbecue.id,
+      willEat: true,
+      willDrink: false,
+    });
+
+    await toggleBarbecueRSVPWillDrink.run({
+      rsvpId: barbecueRSVP.id,
+      loggedInUserId: user.id,
+    });
+
+    const monthCalendar = await getMonth.run({
+      month: 11,
+      year: 2020,
+      loggedInUserId: user.id,
+    });
+
+    expect(monthCalendar).toContainEqual({
+      day: bbqDate.getDate(),
+      barbecue: {
+        id: barbecue.id,
+        organizer: user.username,
+        date: bbqDate,
+        hour: undefined,
+        title: undefined,
+        priceRange: {
+          from: 25,
+          to: 60,
+        },
+        rsvp: {
+          no: 0,
+          yes: 1,
+        },
+        isOrganizerLoggedIn: true,
+      },
+    });
+  });
+
+  it('should not be able to get barbecue list for a month that is not between 1 and 12', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    expect(
+      getMonth.run({
+        month: 14,
+        year: 2020,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(InvalidMonthException);
+  });
+
+  it('should not be able to get barbecue list for a month before the year of 2020', async () => {
+    const user = await createUser.run({
+      username: 'john.doe',
+      password: 'whatevs',
+    });
+
+    expect(
+      getMonth.run({
+        month: 12,
+        year: 2019,
+        loggedInUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(BeforeStartOfTimeException);
   });
 });
