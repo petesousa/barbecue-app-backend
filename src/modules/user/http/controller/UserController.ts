@@ -14,7 +14,7 @@ class UserController {
       password,
     });
 
-    return response.json({ data: user });
+    return response.json(user);
   }
 }
 

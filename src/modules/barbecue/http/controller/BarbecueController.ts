@@ -28,7 +28,7 @@ class BarbecueController {
       drinksPrice,
     });
 
-    return response.json({ data: barbecue });
+    return response.json(barbecue);
   }
 
   public async getDetails(
@@ -43,7 +43,7 @@ class BarbecueController {
       loggedInUserId: request.user.id,
     });
 
-    return response.json({ data: barbecue });
+    return response.json(barbecue);
   }
 
   public async listByMonth(
@@ -59,7 +59,7 @@ class BarbecueController {
       loggedInUserId: request.user.id,
     });
 
-    return response.json({ data: barbecues });
+    return response.json(barbecues);
   }
 }
 
