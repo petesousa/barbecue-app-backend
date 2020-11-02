@@ -61,7 +61,7 @@ describe('GetMonthBarbecueList', () => {
       password: 'whatevs',
     });
 
-    const bbqDate = addHours(new Date(), 12);
+    const bbqDate = addHours(new Date(), 3);
     const barbecue = await createBarbecue.run({
       date: bbqDate,
       organizerId: user.id,
@@ -89,8 +89,8 @@ describe('GetMonthBarbecueList', () => {
     });
 
     const monthCalendar = await getMonth.run({
-      month: 11,
-      year: 2020,
+      month: bbqDate.getMonth() + 1,
+      year: bbqDate.getFullYear(),
       loggedInUserId: user.id,
     });
 
@@ -121,7 +121,7 @@ describe('GetMonthBarbecueList', () => {
       password: 'whatevs',
     });
 
-    const bbqDate = addHours(new Date(), 12);
+    const bbqDate = addHours(new Date(), 3);
     const barbecue = await createBarbecue.run({
       date: bbqDate,
       organizerId: user.id,
@@ -149,8 +149,8 @@ describe('GetMonthBarbecueList', () => {
     });
 
     const monthCalendar = await getMonth.run({
-      month: 11,
-      year: 2020,
+      month: bbqDate.getMonth() + 1,
+      year: bbqDate.getFullYear(),
       loggedInUserId: user.id,
     });
 
