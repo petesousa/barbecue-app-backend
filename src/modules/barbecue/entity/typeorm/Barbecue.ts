@@ -3,8 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import User from '@modules/user/entity/typeorm/User';
 
@@ -16,7 +16,7 @@ class Barbecue {
   @Column()
   organizerId: string;
 
-  @ManyToOne(() => User)
+  @OneToOne(() => User)
   @JoinColumn({ name: 'organizerId' })
   organizer: User;
 

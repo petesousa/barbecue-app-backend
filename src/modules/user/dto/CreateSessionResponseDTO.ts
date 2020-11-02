@@ -1,6 +1,6 @@
-import LoggedUserResponseDTO from './LoggedUserResponseDTO';
+import LoggedUserDTO from './LoggedUserDTO';
 
 export default interface CreateSessionResponseDTO {
-  user: LoggedUserResponseDTO;
+  user: LoggedUserDTO;
   token: string;
 }

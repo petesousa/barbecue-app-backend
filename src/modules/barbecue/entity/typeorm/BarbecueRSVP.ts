@@ -3,8 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToMany,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import User from '@modules/user/entity/typeorm/User';
 import Barbecue from './Barbecue';
@@ -17,14 +17,14 @@ class BarbecueRSVP {
   @Column()
   userId: string;
 
-  @ManyToMany(() => User)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;
 
   @Column()
   barbecueId: string;
 
-  @ManyToMany(() => Barbecue)
+  @ManyToOne(() => Barbecue)
   @JoinColumn({ name: 'barbecueId' })
   barbecue: Barbecue;
 
