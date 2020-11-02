@@ -151,10 +151,7 @@ describe('GetBarbecueDetails', () => {
       username: 'john.doe',
       password: 'whatevs',
     });
-    const JaneDoe = await createUser.run({
-      username: 'jane.doe',
-      password: 'whatevs',
-    });
+
     const JonasDoe = await createUser.run({
       username: 'jonas.doe',
       password: 'whatevs',
