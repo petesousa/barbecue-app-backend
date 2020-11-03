@@ -1,4 +1,4 @@
-import { ListUserDTO } from '@modules/user/dto/ListUserDTO';
+import ListUserDTO from '@modules/user/dto/ListUserDTO';
 import BarbecueRSVP from '@modules/barbecue/entity/typeorm/BarbecueRSVP';
 import BarbecueRSVPDetailsDTO from './BarbecueRSVPDetailsDTO';
 

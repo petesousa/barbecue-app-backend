@@ -24,6 +24,7 @@ barbecueRouter.post(
 );
 
 barbecueRouter.get('/', barbecueController.listByMonth);
+barbecueRouter.get('/:date', barbecueController.getByDate);
 
 barbecueRouter.get(
   '/:barbecueId',
