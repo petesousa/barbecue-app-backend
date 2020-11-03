@@ -9,6 +9,7 @@ import ListUserService from '@modules/user/service/ListUserService';
 import DateProvider from '@shared/providers/DateProvider/model/DateProvider';
 import UserRepository from '@modules/user/repository/UserRepository';
 import InvalidMonthException from '@shared/exception/InvalidMonthException';
+import { isAfter } from 'date-fns';
 import BeforeStartOfTimeException from '../exception/BeforeStartOfTimeException';
 
 @injectable()
@@ -85,9 +86,15 @@ class GetMonthBarbecueListService {
           isOrganizerLoggedIn: loggedInUserId === organizerId,
         };
       }
+
+      const isDateAvailable = isAfter(
+        new Date(year, month - 1, day, 23, 59, 59),
+        new Date(),
+      );
       return {
         day,
         barbecue,
+        isDateAvailable,
       };
     });
 

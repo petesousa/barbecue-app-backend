@@ -4,4 +4,5 @@ import BarbecuePostItDTO from './BarbecuePostItDTO';
 export default interface CalendarDayContentDTO {
   day: number;
   barbecue: Barbecue | BarbecuePostItDTO | undefined;
+  isDateAvailable: boolean;
 }
