@@ -50,7 +50,7 @@ class BarbecueController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { month, year } = request.body;
+    const { month, year } = request.query;
 
     const getMonthBarbecueList = container.resolve(GetMonthBarbecueListService);
     const barbecues = await getMonthBarbecueList.run({
