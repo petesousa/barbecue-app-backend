@@ -1,7 +1,7 @@
 import UserException from './UserException';
 
 class InvalidCredentialsException extends UserException {
-  public readonly message: string = 'Invalid Credentials.';
+  public readonly message: string = 'Credenciais inválidas.';
 
   public readonly statusCode: number = 403;
 }

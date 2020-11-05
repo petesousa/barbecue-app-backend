@@ -1,7 +1,7 @@
 import UserException from './UserException';
 
 class UnauthorizedAccessException extends UserException {
-  public readonly message: string = 'Operation unauthorized.';
+  public readonly message: string = 'Operação não autorizada.';
 
   public readonly statusCode: number = 403;
 }

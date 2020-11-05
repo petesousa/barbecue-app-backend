@@ -2,7 +2,7 @@ import BarbecueException from './BarbecueException';
 
 class BarbecueRSVPDoesNotBelongToUserException extends BarbecueException {
   public readonly message: string =
-    'Barbecue RSVP does not belong to this user.';
+    'Somente o usuário pode alterar sua confirmação';
 
   public readonly statusCode: number = 403;
 }
