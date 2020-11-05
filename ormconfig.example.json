@@ -1,0 +1,17 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "bbqappdocker",
+  "database": "barbecue_app_db",
+  "entities": [
+    "./src/modules/**/entity/typeorm/*.ts"
+  ],
+  "migrations": [
+    "./src/shared/database/typeorm/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/shared/database/typeorm/migrations"
+  }
+}
